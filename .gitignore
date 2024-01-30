@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # Directories and Files
-informations.env
+.informations.env
