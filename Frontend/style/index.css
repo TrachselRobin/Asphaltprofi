@@ -283,6 +283,11 @@ main section:nth-child(even) {
     color: white;
 }
 
+#pricing > ul > li:nth-child(3) h1 {
+    background: linear-gradient(45deg, var(--lightRed), var(--darkRed));
+    color: white;
+}
+
 #pricing > ul > li > * {
     padding: 20px;
 }
@@ -305,4 +310,97 @@ main section:nth-child(even) {
 
 #pricing > ul > li a:hover {
     background-color: var(--darkYellow);
+}
+
+#priceList {
+    font-family: 'Raleway', sans-serif;
+}
+
+#priceList table {
+    width: 60rem;
+    border-collapse: collapse;
+}
+
+#priceList table tr {
+    height: 50px;
+}
+
+#priceList table th {
+    background-color: #335c675e;
+    color: black;
+    font-weight: bold;
+    text-align: left;
+    padding-left: 20px;
+}
+
+#priceList table th:nth-child(3) {
+    text-align: right;
+    padding-right: 20px;
+}
+
+#priceList table tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+#priceList table tr:nth-child(even) {
+    background-color: #e6e6e6;
+}
+
+#priceList table tr td {
+    padding-left: 20px;
+}
+
+#priceList table tr td:nth-child(3) {
+    text-align: right;
+    padding-right: 20px;
+}
+
+/* Footer */
+
+footer {
+    display: flex;
+    justify-content: center;
+    background-color: var(--turquoise);
+    color: white;
+    font-family: 'Raleway', sans-serif;
+    padding: 40px 0;
+}
+
+footer ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    width: 100%;
+}
+
+footer ul li h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+footer ul li p {
+    font-size: 1.2rem;
+    font-weight: 300;
+    height: 30px;
+}
+
+footer ul li a {
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+/* if link has child h2 then "text-decoration: none;" on link */
+footer ul li a:has(h2) {
+    text-decoration: none;
+}
+
+footer ul li a:hover {
+    color: var(--lightYellow);
+}
+
+footer ul li table tr {
+    height: 30px;
 }
