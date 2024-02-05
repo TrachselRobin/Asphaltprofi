@@ -261,6 +261,12 @@ main section:nth-child(even) {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     margin: 0 30px;
+    transition: all 0.3s ease;
+}
+
+#pricing > ul > li:hover {
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.5);
+    transform: scale(1.05);
 }
 
 #pricing > ul > li h2 {
