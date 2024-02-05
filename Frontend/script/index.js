@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     const CAROUSEL = document.getElementById('carousel');
-
     const CAROUSEL_CHILDREN = CAROUSEL.children.length;
+
+    const NAVBAR = document.getElementsByTagName('nav')[0];
 
     /*
         Create a new keyframes animation for the carousel that depends on the number of children.
@@ -40,4 +41,13 @@ document.addEventListener('DOMContentLoaded', function () {
     document.head.appendChild(STYLE);
 
     CAROUSEL.style.animation = `carousel ${5 * CAROUSEL_CHILDREN}s infinite`;
+
+    window.addEventListener('scroll', function () {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        if (currentScroll > 100) {
+            NAVBAR.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+        } else {
+            NAVBAR.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+        }
+    }, false);
 });
