@@ -1,0 +1,152 @@
+/*
+    Fonts: 
+    font-family: 'Comic Neue', cursive;
+    font-family: 'Raleway', sans-serif;
+    font-family: 'Tektur', sans-serif;
+*/
+
+/* root */
+:root {
+    --turquoise: #335c67;
+    --lightYellow: #fff3b0;
+    --darkYellow: #e09f3e;
+    --lightRed: #9e2a2b;
+    --darkRed: #540b0e;
+}
+
+
+* {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100vw;
+}
+
+/* Navbar */
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Raleway', sans-serif;
+    position: fixed;
+    width: 100vw;
+}
+
+nav ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+}
+
+.navLink:hover {
+    background-color: #fff3b03f;
+}
+
+nav ul li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0px;
+    height: 100px;
+}
+
+nav ul li a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    height: 100%;
+    padding: 0 20px;
+    transition: background-color 0.3s ease;
+    font-size: 1.2rem;
+}
+
+#app {
+    height: unset;
+}
+
+#app a {
+    background-color: var(--lightYellow);
+    margin: 0 20px;
+    padding: 20px;
+    border-radius: 10px;
+    color: black;
+}
+
+#app a:hover {
+    background-color: var(--darkYellow);
+}
+
+#logo {
+    font-family: 'Tektur', sans-serif;
+    margin-left: 10px;
+}
+
+#logoProfi, #logoAsphalt {
+    font-size: 3rem;
+    letter-spacing: 3px;
+}
+
+#logoProfi {
+    color: var(--lightRed)
+}
+
+/* Header */
+
+header {
+    display: flex;
+    align-items: center;
+    background-color: #0000007d;
+    color: white;
+    font-family: "Raleway", sans-serif;
+    height: 70vh;
+}
+
+#carousel {
+    display: flex;
+    position: absolute;
+    list-style: none;
+    z-index: -1;
+    width: 100vw;
+    max-height: 70vh;
+    padding: 0;
+    margin: 0;
+    transform: translateX(-100vw);
+}
+
+#carousel li img {
+    object-fit: cover;
+    width: 100vw;
+    height: 70vh;
+}
+
+#title {
+    margin-left: 3rem;
+    width: 40%;
+}
+
+#title h1 {
+    font-size: 3rem;
+    font-family: 'Raleway', sans-serif;
+    letter-spacing: 2px;
+}
+
+#title h1 b {
+    color: var(--darkYellow);
+}
+
+#title h2 {
+    font-size: 1.5rem;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    letter-spacing: 2px;
+}
