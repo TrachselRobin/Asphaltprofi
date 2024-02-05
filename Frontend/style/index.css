@@ -48,7 +48,8 @@ nav ul {
 }
 
 .navLink:hover {
-    background-color: #fff3b03f;
+    background-color: #fff3b0;
+    color: black;
 }
 
 nav ul li {
@@ -70,6 +71,10 @@ nav ul li a {
     padding: 0 20px;
     transition: background-color 0.3s ease;
     font-size: 1.2rem;
+}
+
+.navLink {
+    transition: all 0.3s ease;
 }
 
 #app {
@@ -132,7 +137,7 @@ header {
 }
 
 #title {
-    margin-left: 3rem;
+    margin-left: 6rem;
     width: 40%;
 }
 
@@ -173,11 +178,25 @@ header {
 
 main {
     width: 100%;
-    padding: 0 40px;
 }
 
-main section {
-    padding: 100px 0;
+main > section {
+    padding: 5rem 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+main > section > * {
+    margin-bottom: 40px;
+}
+
+main > section > h1 {
+    font-size: 3rem;
+    font-family: 'Raleway', sans-serif;
+    font-weight: bold;
+    letter-spacing: 2px;
 }
 
 #description ul {
@@ -192,8 +211,8 @@ main section {
     border-radius: 10px;
     margin: 0 30px;
     padding: 20px;
-    width: 20%;
-    height: 300px;
+    width: 20rem;
+    min-height: 20rem;
 }
 
 #description ul li h2 {
@@ -226,5 +245,64 @@ main section {
 }
 
 main section:nth-child(even) {
+    background-color: #335c6716;
+}
+
+#pricing > ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    font-family: 'Raleway', sans-serif;
+}
+
+#pricing > ul > li {
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin: 0 30px;
+}
+
+#pricing > ul > li h2 {
+    font-weight: 300;
+    font-size: small;
+}
+
+#pricing > ul > li h2 b {
+    font-weight: bold;
+    font-size: 2.5rem;
+}
+
+#pricing > ul > li:nth-child(1) h1 {
+    background-color: lightgray;
+    color: white;
+}
+
+#pricing > ul > li:nth-child(2) h1 {
+    background: linear-gradient(45deg, var(--darkYellow), var(--lightYellow));
+    color: white;
+}
+
+#pricing > ul > li > * {
+    padding: 20px;
+}
+
+#pricing > ul > li table tr {
+    height: 30px;
+}
+
+#pricing > ul > li a {
     background-color: var(--lightYellow);
+    margin: 20px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+#pricing > ul > li a:hover {
+    background-color: var(--darkYellow);
 }
