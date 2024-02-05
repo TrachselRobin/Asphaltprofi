@@ -142,7 +142,7 @@ header {
 }
 
 #title h1 {
-    font-size: 3rem;
+    font-size: 2rem;
     font-family: 'Raleway', sans-serif;
     letter-spacing: 5px;
 }
@@ -152,7 +152,7 @@ header {
 }
 
 #title h2 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-family: 'Raleway', sans-serif;
     font-weight: 300;
     letter-spacing: 2px;
@@ -168,6 +168,7 @@ header {
     text-decoration: none;
     font-weight: bold;
     display: inline-block;
+    transition: background-color 0.3s ease;
 }
 
 #title a:hover {
