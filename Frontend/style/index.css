@@ -407,7 +407,7 @@ main section:nth-child(odd) {
 footer {
     display: flex;
     justify-content: center;
-    background-color: var(--turquoise);
+    background-color: #272727;
     color: white;
     font-family: 'Raleway', sans-serif;
     padding: 40px 0;
@@ -453,7 +453,7 @@ footer ul li table tr {
 }
 
 footer ul li table tr td {
-    padding: 0 20px;
+    padding-right: 20px;
 }
 
 /* if screen smaller than 1150 */
