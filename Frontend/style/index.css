@@ -151,7 +151,7 @@ header {
 
 #carousel {
     display: flex;
-    position: absolute;
+    position: relative;
     list-style: none;
     z-index: -1;
     width: 100vw;
@@ -170,6 +170,7 @@ header {
 #title {
     margin-left: 6rem;
     width: 40%;
+    position: absolute;
 }
 
 #title h1 {
