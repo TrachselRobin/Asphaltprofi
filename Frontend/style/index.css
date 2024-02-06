@@ -467,6 +467,7 @@ footer ul li table tr td {
 
     #description ul li {
         margin: 20px 0;
+        width: 50%;
     }
 
     #description ul li:nth-child(2) {
@@ -523,6 +524,12 @@ footer ul li table tr td {
 
     #priceList table {
         width: 100%;
+    }
+}
+
+@media (max-width: 800px) {
+    #description ul li {
+        width: 90%;
     }
 }
 
