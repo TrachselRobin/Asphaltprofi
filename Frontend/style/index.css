@@ -282,7 +282,7 @@ main > section > h1 {
 }
 
 main section:nth-child(even) {
-    background-color: #e7e9ea;
+    background-color: #e7e9eb;
 }
 
 main section:nth-child(odd) {
