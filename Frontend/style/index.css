@@ -511,10 +511,26 @@ footer ul li table tr td {
     footer ul li {
         margin: 20px 0;
     }
+
+    #priceList table {
+        width: 100%;
+    }
 }
 
 @media (max-width: 550px) {
     #title {
         width: 90%;
+    }
+}
+ 
+@media (max-width: 450px) {
+    #logoProfi, #logoAsphalt {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 400px) {
+    #logoProfi, #logoAsphalt {
+        font-size: 2rem;
     }
 }
