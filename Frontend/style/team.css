@@ -1,0 +1,154 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#burger {
+    filter: invert(1);
+}
+
+nav ul li a {
+    color: black;
+}
+
+header {
+    background-color: white;
+    font-family: "Raleway", sans-serif;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    padding: 0 6rem;
+    color: black;
+}
+
+header img {
+    object-fit: cover;
+    object-position: top;
+    width: 500px;
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+}
+
+#title {
+    padding-right: 2rem;
+    max-width: 500px;
+}
+
+#title h1 {
+    font-size: 3rem;
+    font-weight: 300;
+}
+
+#title h2 {
+    font-size: 2rem;
+    font-weight: 300;
+    text-align: justify;
+}
+
+#title h3 {
+    width: 100%;
+    text-align: right;
+    font-weight: 300;
+}
+
+main {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Raleway", sans-serif;
+}
+
+main section {
+    padding: 2rem 6rem;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+main section ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+main section h1 {
+    font-size: 3rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+}
+
+.person {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2rem;
+    width: 300px;
+}
+
+.person img {
+    object-fit: cover;
+    object-position: top;
+    width: 300px;
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+}
+
+.person h2 {
+    font-size: 2rem;
+    margin: 1rem 0;
+}
+
+@media (max-width: 1200px) {
+    header img {
+        width: 400px;
+    }
+}
+
+@media (max-width: 1070px) {
+    header {
+        padding: 0 2rem;
+    }
+
+    header img {
+        width: 300px;
+    }
+}
+
+/* 860px */
+@media (max-width: 860px) {
+    header {
+        padding: 0 1rem;
+        flex-direction: column;
+        height: unset;
+        padding: 100px 0;
+    }
+
+    header img {
+        width: 60%;
+    }
+
+    #title {
+        padding: 2rem 0;
+        text-align: center;
+        width: 90%;
+        margin: 0;
+    }
+}
+
+/* 500px */
+@media (max-width: 500px) {
+    #title h2 {
+        font-size: 1.5rem;
+    }
+}
