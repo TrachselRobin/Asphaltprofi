@@ -22,6 +22,10 @@
     padding: 0;
 }
 
+html {
+    background-color: black;
+}
+
 body {
     overflow-x: hidden;
     width: 100vw;
@@ -278,7 +282,11 @@ main > section > h1 {
 }
 
 main section:nth-child(even) {
-    background-color: #335c6716;
+    background-color: #e7e9ea;
+}
+
+main section:nth-child(odd) {
+    background-color: white;
 }
 
 #pricing > ul {
