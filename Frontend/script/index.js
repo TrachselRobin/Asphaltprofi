@@ -50,4 +50,21 @@ document.addEventListener('DOMContentLoaded', function () {
             NAVBAR.style.backgroundColor = 'rgba(0, 0, 0, 0)';
         }
     }, false);
+
+    document.addEventListener('click', function (event) {
+        const BURGERLIST = document.getElementById('burgerList');
+        if (BURGERLIST.classList.contains('burgerLeft') && event.target.id !== "burgerList" && event.target.id !== "burgerLi") {
+            toggleMenu();
+        }
+    });
 });
+
+function toggleMenu() {
+    const BURGERLIST = document.getElementById('burgerList');
+    BURGERLIST.classList.toggle('burgerLeft');
+    if (BURGERLIST.classList.contains('burgerLeft')) {
+        BURGERLIST.style.left = '0';
+    } else {
+        BURGERLIST.style.left = '100vw';
+    }
+}

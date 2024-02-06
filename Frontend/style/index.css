@@ -107,6 +107,35 @@ nav ul li a {
     color: var(--lightRed);
 }
 
+#burger {
+    display: none;
+}
+
+#burger li {
+    filter: invert(1);
+    font-size: 3rem;
+    margin-right: 2rem;
+    cursor: pointer;
+}
+
+#burgerList {
+    display: none;
+    position: absolute;
+    top: 100px;
+    left: 100vw;
+    background-color: var(--turquoise);
+    width: 100vw;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: left 0.3s ease;
+}
+
+#burgerList li:last-child {
+    margin: 20px 0;
+}
+
 /* Header */
 
 header {
@@ -115,7 +144,9 @@ header {
     background-color: #000000b8;
     color: white;
     font-family: "Raleway", sans-serif;
+    overflow: hidden;
     height: 80vh;
+    width: 100vw;
 }
 
 #carousel {
@@ -410,4 +441,80 @@ footer ul li a:hover {
 
 footer ul li table tr {
     height: 30px;
+}
+
+footer ul li table tr td {
+    padding: 0 20px;
+}
+
+/* if screen smaller than 1150 */
+
+@media (max-width: 1150px) {
+    #description ul {
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+    }
+
+    #description ul li {
+        margin: 20px 0;
+    }
+
+    #description ul li:nth-child(2) {
+        transform: scale(1);
+    }
+
+    #pricing ul{
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+    }
+
+    #pricing ul li {
+        margin: 20px 0;
+    }
+}
+
+/* if screen smaller than 1100 */
+@media (max-width: 1100px) {
+    #links {
+        display: none;
+    }
+
+    #burger {
+        display: block;
+    }
+
+    #burgerList {
+        display: flex;
+    }
+
+    #title {
+        margin-left: 2rem;
+        width: 60%;
+    }
+}
+
+/* if screen smaller than 1000 */
+@media (max-width: 1000px) {
+    footer {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    footer ul {
+        flex-direction: column;
+        width: unset;
+    }
+
+    footer ul li {
+        margin: 20px 0;
+    }
+}
+
+@media (max-width: 550px) {
+    #title {
+        width: 90%;
+    }
 }
