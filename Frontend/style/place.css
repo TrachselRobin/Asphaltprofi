@@ -1,0 +1,37 @@
+#title h2 a {
+    background-color: transparent;
+    color: white;
+    text-decoration: underline;
+    /* underline with a color */
+    text-decoration-color: #f1c40f;
+    padding: 0;
+    margin: 0;
+}
+
+main {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 2rem 0;
+    font-family: "Raleway", sans-serif;
+}
+
+main iframe {
+    max-width: 600px;
+}
+
+@media (max-width: 600px) {
+    main h1 {
+        font-size: 2rem;
+    }
+
+    main iframe {
+        max-width: 100%;
+    }
+}
