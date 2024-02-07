@@ -417,7 +417,13 @@ footer ul li table tr td {
 }
 
 @media (min-width: 1920px) {
-    #title {
-        transform: scale(1.5);
+    #title h1 {
+        font-size: 3rem;
+        letter-spacing: 7px;
+    }
+
+    #title h2 {
+        font-size: 1.5rem;
+        letter-spacing: 3px;
     }
 }
