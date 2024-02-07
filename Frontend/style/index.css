@@ -426,4 +426,9 @@ footer ul li table tr td {
         font-size: 1.5rem;
         letter-spacing: 3px;
     }
+
+    #title a {
+        font-size: 1.5rem;
+        padding: 30px;
+    }
 }
