@@ -415,3 +415,9 @@ footer ul li table tr td {
         letter-spacing: normal;
     }
 }
+
+@media (min-width: 1920px) {
+    #title {
+        transform: scale(1.5);
+    }
+}
