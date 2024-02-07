@@ -227,3 +227,15 @@ main section:nth-child(odd) {
         width: 90%;
     }
 }
+
+@media (max-width: 450px) {
+    main sectin {
+        padding: 5rem 0;
+    }
+}
+
+@media (max-width: 380px) {
+    main > section > h1 {
+        font-size: 2rem;
+    }
+}

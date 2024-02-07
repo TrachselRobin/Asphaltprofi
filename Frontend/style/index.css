@@ -40,6 +40,7 @@ nav {
     font-family: 'Raleway', sans-serif;
     position: fixed;
     width: 100vw;
+    height: 100px;
     transition: background-color 0.3s ease;
     z-index: 1;
 }
@@ -99,12 +100,24 @@ nav ul li a {
 
 #logo {
     font-family: 'Tektur', sans-serif;
+    display: flex;
+    align-items: center;
     margin-left: 10px;
+    text-decoration: none;
+    height: 100%;
+}
+
+#logo img {
+    height: 100%;
 }
 
 #logoProfi, #logoAsphalt {
     font-size: 3rem;
     letter-spacing: 3px;
+}
+
+#logoAsphalt {
+    color: white;
 }
 
 #logoProfi {
@@ -279,6 +292,20 @@ footer ul li table tr td {
     padding-right: 20px;
 }
 
+@media (max-width: 1250px) {
+    #links {
+        display: none;
+    }
+
+    #burger {
+        display: block;
+    }
+
+    #burgerList {
+        display: flex;
+    }
+}
+
 /* if screen smaller than 1150 */
 
 @media (max-width: 1150px) {
@@ -310,18 +337,6 @@ footer ul li table tr td {
 
 /* if screen smaller than 1100 */
 @media (max-width: 1100px) {
-    #links {
-        display: none;
-    }
-
-    #burger {
-        display: block;
-    }
-
-    #burgerList {
-        display: flex;
-    }
-
     #title {
         margin-left: 2rem;
         width: 60%;
@@ -365,17 +380,33 @@ footer ul li table tr td {
     }
 }
 
+@media (max-width: 600px) {
+    #logoProfi, #logoAsphalt {
+        font-size: 2.5rem;
+    }
+
+    #logo img {
+        height: 80%;
+    }
+}
+
 @media (max-width: 550px) {
     #title {
         width: 90%;
     }
 }
- 
-@media (max-width: 450px) {
+
+@media (max-width: 500px) {
     #logoProfi, #logoAsphalt {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
 
+    #logo img {
+        height: 70%;
+    }
+}
+ 
+@media (max-width: 450px) {
     #title  {
         display: flex;
         flex-direction: column;
@@ -392,19 +423,13 @@ footer ul li table tr td {
         font-size: 1rem;
         text-align: center;
     }
-}
 
-@media (max-width: 400px) {
-    #logoProfi, #logoAsphalt {
-        font-size: 2rem;
+    #logo h1 {
+        display: none;
     }
 }
 
 @media (max-width: 380px) {
-    #logoProfi, #logoAsphalt {
-        font-size: 1.5rem;
-    }
-
     #title h1 {
         font-size: 1.2rem;
         letter-spacing: normal;

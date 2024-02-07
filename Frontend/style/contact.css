@@ -25,7 +25,7 @@ main section:nth-child(even) {
 
 main section img {
     height: 45vh;
-    object-fit: cover;
+    aspect-ratio: 1/1;
 }
 
 .text {
@@ -68,12 +68,14 @@ main h1 {
         padding: 2rem 0;
     }
 
-    main section img {
-        height: 50vh;
-        width: 100%;
-    }
-
     .text {
         width: 100%;
+    }
+}
+
+@media (max-width: 370px) {
+    main section img {
+        width: 100vw;
+        height: 100vw;
     }
 }
