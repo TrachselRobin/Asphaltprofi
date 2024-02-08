@@ -160,7 +160,7 @@ nav ul li a {
     background-color: var(--lightYellow);
     padding: 20px;
     border-radius: 10px;
-    font-size: 1.5rem;
+    font-size: 1.9rem;
     color: black;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -199,15 +199,17 @@ header {
 }
 
 #title {
-    margin-left: 6rem;
-    width: 40%;
+    padding: 2rem 2rem 2rem 6rem;
+    width: 50%;
     position: absolute;
+    background-color: #000000;
 }
 
 #title h1 {
-    font-size: 2rem;
+    font-size: 3rem;
     font-family: 'Raleway', sans-serif;
     letter-spacing: 5px;
+    margin-bottom: 1rem;
 }
 
 #title h1 b {
@@ -219,6 +221,7 @@ header {
     font-family: 'Raleway', sans-serif;
     font-weight: 300;
     letter-spacing: 2px;
+    margin-left: 20px;
 }
 
 #title a {
@@ -227,6 +230,7 @@ header {
     padding: 20px;
     border-radius: 10px;
     font-size: 1.2rem;
+    margin-left: 20px;
     color: black;
     text-decoration: none;
     font-weight: bold;
@@ -292,6 +296,12 @@ footer ul li table tr td {
     padding-right: 20px;
 }
 
+@media (max-width: 1400px) {
+    #title {
+        padding: 2rem 2rem 2rem 2rem;
+    }
+}
+
 @media (max-width: 1250px) {
     #links {
         display: none;
@@ -303,6 +313,10 @@ footer ul li table tr td {
 
     #burgerList {
         display: flex;
+    }
+
+    #title h1 {
+        font-size: 2rem;
     }
 }
 
@@ -338,7 +352,6 @@ footer ul li table tr td {
 /* if screen smaller than 1100 */
 @media (max-width: 1100px) {
     #title {
-        margin-left: 2rem;
         width: 60%;
     }
 }
@@ -370,12 +383,7 @@ footer ul li table tr td {
         width: 90%;
     }
 
-    header {
-        justify-content: center;
-    }
-
     #title {
-        margin: 0;
         width: 90%;
     }
 }
@@ -391,8 +399,9 @@ footer ul li table tr td {
 }
 
 @media (max-width: 550px) {
-    #title {
-        width: 90%;
+    #title h1 {
+        font-size: 1.5rem;
+        letter-spacing: 5px;
     }
 }
 
@@ -407,23 +416,6 @@ footer ul li table tr td {
 }
  
 @media (max-width: 450px) {
-    #title  {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-left: 1rem;
-    }
-
-    #title h1 {
-        font-size: 1.5rem;
-        text-align: center;
-    }
-
-    #title h2 {
-        font-size: 1rem;
-        text-align: center;
-    }
-
     #logo h1 {
         display: none;
     }

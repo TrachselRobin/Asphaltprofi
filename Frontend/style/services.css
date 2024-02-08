@@ -65,7 +65,7 @@ main h1 {
 @media (max-width: 950px) {
     main section, main section:nth-child(odd) {
         flex-direction: column;
-        padding: 2rem 0;
+        padding: 2rem 1rem;
     }
 
     main section img {
@@ -75,5 +75,25 @@ main h1 {
 
     .text {
         width: 100%;
+    }
+}
+
+@media (max-width: 450px) {
+    main h1 {
+        font-size: 2rem;
+    }
+
+    .text h2 {
+        font-size: 1.5rem;
+    }
+
+    .text p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 320px) {
+    main h1 {
+        font-size: 1.5rem;
     }
 }
