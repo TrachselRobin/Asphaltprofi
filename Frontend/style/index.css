@@ -82,11 +82,11 @@ nav ul li a {
     transition: all 0.3s ease;
 }
 
-#app {
+.app {
     height: unset;
 }
 
-#app a {
+.app a {
     background-color: var(--lightYellow);
     margin: 0 20px;
     padding: 20px;
@@ -94,7 +94,7 @@ nav ul li a {
     color: black;
 }
 
-#app a:hover {
+.app a:hover {
     background-color: var(--darkYellow);
 }
 
