@@ -3,8 +3,8 @@ CREATE DATABASE nunapuki_users;
 
 USE nunapuki_users;
 
-CREATE TABLE user (
-	`ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (userID), 
+CREATE TABLE users (
+	`ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID), 
     `prename` VARCHAR(20) NOT NULL,
     `name` VARCHAR(20) NOT NULL,
     `age` INTEGER,
@@ -12,20 +12,19 @@ CREATE TABLE user (
     `email` VARCHAR(100) NOT NULL,
     `password` VARCHAR(20) NOT NULL,
     `aboID` INTEGER NOT NULL,
-    `vehicleID` INTEGER,
     `addressID` INTEGER
 );
 
 CREATE TABLE abo (
-	`ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (aboID),
+	`ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
     `name` VARCHAR(20),
     `price` INTEGER
 );
 
 CREATE TABLE vehicle (
-	`ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (vehicleID),
-    `brand` VARCHAR(20),
-    `model` VARCHAR(20),
+	`ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
+    `brand` VARCHAR(20) NOT NULL,
+    `model` VARCHAR(20) NOT NULL,
     `image` VARCHAR(100),
     `year` INTEGER,
     `hp` INTEGER,
@@ -34,12 +33,12 @@ CREATE TABLE vehicle (
 );
 
 CREATE TABLE tag (
-    `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (tagID),
+    `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
     `name` VARCHAR(20)
 );
 
 CREATE TABLE time (
-    `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (timeID),
+    `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
     `start` DATETIME,
     `end` DATETIME
 );
@@ -50,35 +49,77 @@ CREATE TABLE user_time (
 );
 
 CREATE TABLE address (
-    `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (addressID),
+    `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
     `street` VARCHAR(40),
     `number` INTEGER,
     `zip` INTEGER
 );
 
-ALTER TABLE user AUTO_INCREMENT=1000000000;
+CREATE TABLE chat (
+    `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
+    `name` VARCHAR(20)
+);
 
-ALTER TABLE user ADD FOREIGN KEY (aboID) REFERENCES abo (ID);
+CREATE TABLE message (
+    `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
+    `text` VARCHAR(100),
+    `time` DATETIME,
+    `userID` INTEGER
+);
 
-ALTER TABLE user ADD FOREIGN KEY (vehicleID) REFERENCES vehicle (ID);
+CREATE TABLE chat_message (
+    `chatID` INTEGER, 
+    `messageID` INTEGER
+);
+
+CREATE TABLE user_chat (
+    `userID` INTEGER, 
+    `chatID` INTEGER
+);
+
+CREATE TABLE user_vehicle (
+    `userID` INTEGER, 
+    `vehicleID` INTEGER
+);
+
+ALTER TABLE users AUTO_INCREMENT=1000000000;
+
+ALTER TABLE users ADD FOREIGN KEY (aboID) REFERENCES abo (ID);
 
 ALTER TABLE vehicle ADD FOREIGN KEY (tagID) REFERENCES tag (ID);
 
-ALTER TABLE user ADD FOREIGN KEY (addressID) REFERENCES address (ID);
+ALTER TABLE users ADD FOREIGN KEY (addressID) REFERENCES address (ID);
 
-ALTER TABLE user_time ADD FOREIGN KEY (userID) REFERENCES user (ID);
+ALTER TABLE user_time ADD FOREIGN KEY (userID) REFERENCES users (ID);
 ALTER TABLE user_time ADD FOREIGN KEY (timeID) REFERENCES time (ID);
 
+ALTER TABLE user_chat ADD FOREIGN KEY (userID) REFERENCES users (ID);
+ALTER TABLE user_chat ADD FOREIGN KEY (chatID) REFERENCES chat (ID);
+
+ALTER TABLE message ADD FOREIGN KEY (userID) REFERENCES users (ID);
+
+ALTER TABLE chat_message ADD FOREIGN KEY (chatID) REFERENCES chat (ID);
+ALTER TABLE chat_message ADD FOREIGN KEY (messageID) REFERENCES message (ID);
+
+ALTER TABLE user_vehicle ADD FOREIGN KEY (userID) REFERENCES users (ID);
+ALTER TABLE user_vehicle ADD FOREIGN KEY (vehicleID) REFERENCES vehicle (ID);
 
 
-INSERT INTO `abo` * VALUES (1, 'Standard', 0);
-INSERT INTO `abo` * VALUES (2, 'Premium', 100);
-INSERT INTO `abo` * VALUES (3, 'Premium Advanced', 200);
 
-INSERT INTO `tag` * VALUES (1, 'Stock');
-INSERT INTO `tag` * VALUES (2, 'Tuned');
-INSERT INTO `tag` * VALUES (3, 'Racing');
+INSERT INTO `abo` (name, price) VALUES ('Standard', 0);
+INSERT INTO `abo` (name, price) VALUES ('Premium', 100);
+INSERT INTO `abo` (name, price) VALUES ('Premium Advanced', 120);
 
-INSERT INTO `user` * VALUES (1, 'Max', 'Mustermann', 20, 'maxi', 'max@muster.ch', '1234', 1, 1, 1);
+INSERT INTO `tag` (name) VALUES ('Stock');
+INSERT INTO `tag` (name) VALUES ('Modified');
+INSERT INTO `tag` (name) VALUES ('Racing only');
 
-SELECT * FROM `user`;
+INSERT INTO `address` (street, number, zip) VALUES ('Musterstrasse', 1, 8000);
+
+INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('BMW', 'M3', 'https://www.bmw.ch/content/dam/bmw/common/all-models/m-series/m3-sedan/2019/inspire/bmw-m-series-m3-sedan-inspire-01.jpg', 2019, 431, 2979, 1);
+
+INSERT INTO `users` (prename, name, age, username, email, password, aboID, addressID) VALUES ('Max', 'Mustermann', 20, 'maxi', 'max@muster.ch', '1234', 1, 1);
+
+INSERT INTO `user_vehicle` (userID, vehicleID) VALUES (1000000001, 1);
+
+SELECT * FROM `users`;

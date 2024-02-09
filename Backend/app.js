@@ -1,8 +1,10 @@
-// express database
 const express = require('express');
 const app = express();
+const mysql = require('mysql');
 
 const PORT = process.env.PORT || 3000;
+
+const credentials = require('./credentials.json');
 
 app.use(express.json());
 
@@ -11,8 +13,15 @@ app.get('/', (req, res) => {
     log(req, res);
 });
 
-app.get('/test', (req, res) => {
-    res.send([1, 2, 3]);
+app.get('/users', (req, res) => {
+    query('SELECT * FROM users', res);
+    
+    log(req, res);
+});
+
+app.get('/user/:id', (req, res) => {
+    query(`SELECT * FROM users WHERE id = ${req.params.id}`, res);
+    
     log(req, res);
 });
 
@@ -21,6 +30,29 @@ app.listen(PORT, () => {
 });
 
 function log(req, res) {
-    // example log: GET /api/books 200 ${res.responseTime}ms
-    console.log(`${req.method} ${req.url} ${res.statusCode}`);
+    console.log(`${format(req.method, 6)} ${format(req.url, 25)} ${res.statusCode}`);
+}
+
+function format(string, length) {
+    if (string.length < length) {
+        for (let i = string.length; i < length; i++) {
+            string += ' ';
+        }
+    }
+    return string;
+}
+
+function query(sql, res) {
+    const connection = mysql.createConnection(
+        credentials[0]
+    );
+
+    connection.connect();
+
+    connection.query(sql, (error, results, fields) => {
+        if (error) throw error;
+        res.send(results);
+    });
+
+    connection.end();
 }
