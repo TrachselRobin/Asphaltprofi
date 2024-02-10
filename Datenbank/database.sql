@@ -3,6 +3,21 @@ CREATE DATABASE nunapuki_users;
 
 USE nunapuki_users;
 
+/*
+DROP TABLE IF EXISTS user_time;
+DROP TABLE IF EXISTS user_chat;
+DROP TABLE IF EXISTS chat_message;
+DROP TABLE IF EXISTS user_vehicle;
+DROP TABLE IF EXISTS message;
+DROP TABLE IF EXISTS chat;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS abo;
+DROP TABLE IF EXISTS vehicle;
+DROP TABLE IF EXISTS tag;
+DROP TABLE IF EXISTS time;
+*/
+
 CREATE TABLE users (
 	`ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID), 
     `prename` VARCHAR(20) NOT NULL,
@@ -118,8 +133,8 @@ INSERT INTO `tag` (name) VALUES ('Racing only');
 INSERT INTO `address` (street, number, zip, city) VALUES ('Musterstrasse', 1, 8000, 'Zürich');
 INSERT INTO `address` (street, number, zip, city) VALUES ('Maxistrasse', 2, 8001, 'Zürich');
 
-INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('BMW', 'M3', 'https://www.bmw.ch/content/dam/bmw/common/all-models/m-series/m3-sedan/2019/inspire/bmw-m-series-m3-sedan-inspire-01.jpg', 2019, 431, 2979, 1);
-INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('Audi', 'RS6', 'https://www.audi.ch/content/dam/nemo/models/audi-rs6-avant/my-2020/1920x1080-gal-prop-tx/' , 2020, 600, 3993, 2);
+INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('BMW', 'M3', './images/bmw.png', 2019, 431, 2979, 1);
+INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('Audi', 'RS6', './images/audi.png' , 2020, 600, 3993, 2);
 
 INSERT INTO `users` (prename, name, age, username, email, password, aboID, addressID) VALUES ('Max', 'Mustermann', 20, 'maxi', 'max@muster.ch', '1234', 1, 1);
 INSERT INTO `users` (prename, name, age, username, email, password, aboID, addressID) VALUES ('Hans', 'Muster', 25, 'hans', 'hans@muster.ch', '1234', 2, 2);
