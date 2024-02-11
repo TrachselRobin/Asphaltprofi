@@ -122,6 +122,7 @@ APP.put('/user/:id', async (req, res) => {
 
 APP.delete('/user/:id', async (req, res) => {
     const USERID = req.params.id;
+    const USER = await getUser(USERID);
     
     // check if user id exists
     let result = await userIdExists(USERID);
@@ -129,10 +130,18 @@ APP.delete('/user/:id', async (req, res) => {
         res.status(404).send("User not found");
         return;
     }
+    
+    usedAddresses = await addressInUse(USER.addressID);
 
     const SQL = `DELETE FROM users WHERE ID = ${USERID}`;
     result = await sqlQuery(SQL);
     res.send("User deleted");
+
+    // if address is only used by this user, delete it
+    if (usedAddresses === 1) {
+        const SQL = `DELETE FROM address WHERE ID = ${USER.addressID}`;
+        result = await sqlQuery(SQL);
+    }
 
     log(req, res);
 });
