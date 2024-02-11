@@ -73,6 +73,7 @@ APP.post('/user', async (req, res) => {
 
 APP.put('/user/:id', async (req, res) => {
     const BODY = req.body;
+    const USEROLD = await getUser(req.params.id);
     const USER = {prename: BODY.prename, name: BODY.name, age: BODY.age, username: BODY.username, email: BODY.email, password: BODY.password};
     const ADDRESS = {street: BODY.street, city: BODY.city, zip: BODY.zip, number: BODY.number, addressID: undefined};
     
@@ -84,9 +85,16 @@ APP.put('/user/:id', async (req, res) => {
     }
 
     // check if user email exists
-    result = await userEmailExists(USER.email);
+    result = await userEmailExists(USER.email, USEROLD.email);
     if (result) {
         res.status(409).send("Email already exists");
+        return;
+    }
+
+    // check if user username exists
+    result = await userUsernameExists(USER.username, USEROLD.username);
+    if (result) {
+        res.status(409).send("Username already exists");
         return;
     }
 
@@ -184,16 +192,48 @@ async function userIdExists(id) {
     return RESULT.length !== 0;
 }
 
-async function userEmailExists(email) {
+async function userEmailExists(email, exception = undefined) {
     // true if exists, false if not
+    if(exception) {
+        const SQL = `SELECT * FROM users WHERE email = '${email}' AND email != '${exception}'`;
+        const RESULT = await sqlQuery(SQL);
+        return RESULT.length !== 0;
+    }
     const SQL = `SELECT * FROM users WHERE email = '${email}'`;
     const RESULT = await sqlQuery(SQL);
     return RESULT.length !== 0;
 }
 
-async function userUsernameExists(username) {
+async function userUsernameExists(username, exception = undefined) {
     // true if exists, false if not
+    if(exception) {
+        const SQL = `SELECT * FROM users WHERE username = '${username}' AND username != '${exception}'`;
+        const RESULT = await sqlQuery(SQL);
+        return RESULT.length !== 0;
+    }
     const SQL = `SELECT * FROM users WHERE username = '${username}'`;
     const RESULT = await sqlQuery(SQL);
     return RESULT.length !== 0;
+}
+
+async function getUser(ID) {
+    const SQL = `SELECT * FROM users WHERE ID = ${ID}`;
+    const RESULT = await sqlQuery(SQL);
+    /*
+    RESULT = [
+        RowDataPacket {
+            ID: 1000000003,
+            prename: 'Robin',
+            name: 'Trachsel',
+            age: 19,
+            username: 'DoktorHodenlos',
+            email: 'ro.trachsel@vtxfre.ch',
+            password: '123',
+            aboID: 1,
+            addressID: 3
+        }
+    ]
+    */
+
+    return RESULT[0];
 }
