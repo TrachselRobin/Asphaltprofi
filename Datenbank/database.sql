@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS user_time;
 DROP TABLE IF EXISTS user_chat;
 DROP TABLE IF EXISTS chat_message;
 DROP TABLE IF EXISTS user_vehicle;
+DROP TABLE IF EXISTS user_friend;
 DROP TABLE IF EXISTS message;
 DROP TABLE IF EXISTS chat;
 DROP TABLE IF EXISTS users;
@@ -22,10 +23,11 @@ CREATE TABLE users (
 	`ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID), 
     `prename` VARCHAR(20) NOT NULL,
     `name` VARCHAR(20) NOT NULL,
-    `age` INTEGER,
+    `birthdate` DATE,
     `username` VARCHAR(20) NOT NULL,
     `email` VARCHAR(100) NOT NULL,
     `password` VARCHAR(20) NOT NULL,
+    `token` VARCHAR(24),
     `aboID` INTEGER NOT NULL,
     `addressID` INTEGER
 );
@@ -98,6 +100,11 @@ CREATE TABLE user_vehicle (
     `vehicleID` INTEGER
 );
 
+CREATE TABLE user_friend (
+    `userID` INTEGER,
+    `friendID` INTEGER
+);
+
 ALTER TABLE users AUTO_INCREMENT=1000000000;
 
 ALTER TABLE users ADD FOREIGN KEY (aboID) REFERENCES abo (ID);
@@ -120,6 +127,9 @@ ALTER TABLE chat_message ADD FOREIGN KEY (messageID) REFERENCES message (ID);
 ALTER TABLE user_vehicle ADD FOREIGN KEY (userID) REFERENCES users (ID);
 ALTER TABLE user_vehicle ADD FOREIGN KEY (vehicleID) REFERENCES vehicle (ID);
 
+ALTER TABLE user_friend ADD FOREIGN KEY (userID) REFERENCES users (ID);
+ALTER TABLE user_friend ADD FOREIGN KEY (friendID) REFERENCES users (ID);
+
 
 
 INSERT INTO `abo` (name, price) VALUES ('Standard', 0);
@@ -136,8 +146,8 @@ INSERT INTO `address` (street, number, zip, city) VALUES ('Maxistrasse', 2, 8001
 INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('BMW', 'M3', './images/bmw.png', 2019, 431, 2979, 1);
 INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('Audi', 'RS6', './images/audi.png' , 2020, 600, 3993, 2);
 
-INSERT INTO `users` (prename, name, age, username, email, password, aboID, addressID) VALUES ('Max', 'Mustermann', 20, 'maxi', 'max@muster.ch', '1234', 1, 1);
-INSERT INTO `users` (prename, name, age, username, email, password, aboID, addressID) VALUES ('Hans', 'Muster', 25, 'hans', 'hans@muster.ch', '1234', 2, 2);
+INSERT INTO `users` (prename, name, birthdate, username, email, password, aboID, addressID) VALUES ('Max', 'Mustermann', '1990-01-01', 'maxi', 'max@muster.ch', '1234', 1, 1);
+INSERT INTO `users` (prename, name, birthdate, username, email, password, aboID, addressID) VALUES ('Hans', 'Muster', '1991-01-01', 'hansi', 'hans@muster.ch', '1234', 2, 2);
 
 INSERT INTO `user_vehicle` (userID, vehicleID) VALUES (1000000000, 1);
 INSERT INTO `user_vehicle` (userID, vehicleID) VALUES (1000000001, 2);
