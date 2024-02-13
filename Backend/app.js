@@ -537,6 +537,202 @@ APP.delete('/user/:id/time', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
+// create chat with a friend
+/*
+CREATE TABLE chat (
+    `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
+    `userID` INTEGER,
+    `name` VARCHAR(20)
+);
+
+CREATE TABLE message (
+    `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
+    `text` VARCHAR(100),
+    `time` DATETIME,
+    `userID` INTEGER
+);
+
+CREATE TABLE chat_message (
+    `chatID` INTEGER, 
+    `messageID` INTEGER
+);
+
+CREATE TABLE user_chat (
+    `userID` INTEGER, 
+    `chatID` INTEGER
+);
+*/
+APP.post('/user/:id/chat', async (req, res) => {
+    const USERID = req.params.id;
+    const BODY = req.body;
+    const CHAT = {name: BODY.name, friendID: BODY.friendID};
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+    
+    // check if friend id exists
+    result = await userIdExists(CHAT.friendID);
+    if (!result) {
+        res.status(404).send("Friend not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if chat already exists
+    let sql = `SELECT * FROM chat WHERE userID = ${USERID} AND name = '${CHAT.name}'`;
+    result = await sqlQuery(sql);
+    if (result.length !== 0) {
+        res.status(409).send("Chat already exists");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `INSERT INTO chat (userID, name) VALUES (${USERID}, '${CHAT.name}')`;
+    result = await sqlQuery(sql);
+    const CHATID = result.insertId;
+
+    sql = `INSERT INTO user_chat (userID, chatID) VALUES (${USERID}, ${CHATID})`;
+    result = await sqlQuery(sql);
+
+    sql = `INSERT INTO user_chat (userID, chatID) VALUES (${CHAT.friendID}, ${CHATID})`;
+    result = await sqlQuery(sql);
+    res.send("Chat created");
+
+    log(req, res, "SUCCESS");
+});
+
+// get chats of user
+APP.get('/user/:id/chats', async (req, res) => {
+    const USERID = req.params.id;
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    const SQL = `SELECT * FROM chat WHERE ID IN (SELECT chatID FROM user_chat WHERE userID = ${USERID})`;
+    result = await sqlQuery(SQL);
+    res.send(result);
+
+    log(req, res, "SUCCESS");
+});
+
+// delete chat of user
+APP.delete('/user/:id/chat', async (req, res) => {
+    const USERID = req.params.id;
+    const CHATID = req.body.chatID;
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if chat id exists
+    let sql = `SELECT * FROM user_chat WHERE userID = ${USERID} AND chatID = ${CHATID}`;
+    result = await sqlQuery(sql);
+    if (result.length === 0) {
+        res.status(404).send("Chat not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `DELETE FROM user_chat WHERE userID = ${USERID} AND chatID = ${CHATID}`;
+    result = await sqlQuery(sql);
+
+    sql = `DELETE FROM chat WHERE ID = ${CHATID}`;
+    result = await sqlQuery(sql);
+    res.send("Chat deleted");
+
+    log(req, res, "SUCCESS");
+});
+
+// get messages of chat
+APP.get('/chat/:id/messages', async (req, res) => {
+    const CHATID = req.params.id;
+    
+    const SQL = `SELECT * FROM message WHERE ID IN (SELECT messageID FROM chat_message WHERE chatID = ${CHATID})`;
+    result = await sqlQuery(SQL);
+    res.send(result);
+
+    log(req, res, "SUCCESS");
+});
+
+// add message to chat
+APP.post('/chat/:id/message', async (req, res) => {
+    const CHATID = req.params.id;
+    const BODY = req.body;
+    const MESSAGE = {text: BODY.text, time: BODY.time, userID: BODY.userID};
+    
+    // check if chat id exists
+    let result = await userIdExists(CHATID);
+    if (!result) {
+        res.status(404).send("Chat not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if user id exists
+    result = await userIdExists(MESSAGE.userID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `INSERT INTO message (text, time, userID) VALUES ('${MESSAGE.text}', '${MESSAGE.time}', ${MESSAGE.userID})`;
+    result = await sqlQuery(sql);
+    const MESSAGEID = result.insertId;
+
+    sql = `INSERT INTO chat_message (chatID, messageID) VALUES (${CHATID}, ${MESSAGEID})`;
+    result = await sqlQuery(sql);
+    res.send("Message added");
+
+    log(req, res, "SUCCESS");
+});
+
+// delete message of chat
+APP.delete('/chat/:id/message', async (req, res) => {
+    const CHATID = req.params.id;
+    const MESSAGEID = req.body.messageID;
+    
+    // check if chat id exists
+    let result = await userIdExists(CHATID);
+    if (!result) {
+        res.status(404).send("Chat not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if message id exists
+    let sql = `SELECT * FROM chat_message WHERE chatID = ${CHATID} AND messageID = ${MESSAGEID}`;
+    result = await sqlQuery(sql);
+    if (result.length === 0) {
+        res.status(404).send("Message not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `DELETE FROM chat_message WHERE chatID = ${CHATID} AND messageID = ${MESSAGEID}`;
+    result = await sqlQuery(sql);
+
+    sql = `DELETE FROM message WHERE ID = ${MESSAGEID}`;
+    result = await sqlQuery(sql);
+    res.send("Message deleted");
+
+    log(req, res, "SUCCESS");
+});
+
 APP.listen(PORT, () => {
     console.log('Listening on port 3000...')
 });
