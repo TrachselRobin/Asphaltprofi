@@ -869,3 +869,41 @@ async function userCarExists(userID, carID) {
     const RESULT = await sqlQuery(SQL);
     return RESULT.length !== 0;
 }
+
+/*
+All requests and example header and urls
+
+GET /
+
+GET /users
+GET /user/1
+POST /user
+PUT /user/1
+DELETE /user/1
+
+GET /user/1/cars
+POST /user/1/car
+PUT /user/1/car/1
+DELETE /user/1/car/1
+
+GET /verify/1
+POST /login
+DELETE /logout
+
+GET /user/1/friends
+POST /user/1/friend
+DELETE /user/1/friend
+
+GET /user/1/times
+POST /user/1/time
+DELETE /user/1/time
+
+GET /user/1/chats
+POST /user/1/chat
+PUT /user/1/chat
+DELETE /user/1/chat
+
+GET /chat/1/messages
+POST /chat/1/message
+DELETE /chat/1/message
+*/
