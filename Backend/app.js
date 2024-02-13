@@ -657,6 +657,36 @@ APP.delete('/user/:id/chat', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
+// rename chat
+APP.put('/user/:id/chat', async (req, res) => {
+    const USERID = req.params.id;
+    const CHATID = req.body.chatID;
+    const NAME = req.body.name;
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+    
+    // check if chat id exists
+    let sql = `SELECT * FROM user_chat WHERE userID = ${USERID} AND chatID = ${CHATID}`;
+    result = await sqlQuery(sql);
+    if (result.length === 0) {
+        res.status(404).send("Chat not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `UPDATE chat SET name = '${NAME}' WHERE ID = ${CHATID}`;
+    result = await sqlQuery(sql);
+    res.send("Chat renamed");
+
+    log(req, res, "SUCCESS");
+});
+
 // get messages of chat
 APP.get('/chat/:id/messages', async (req, res) => {
     const CHATID = req.params.id;
