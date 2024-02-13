@@ -28,6 +28,7 @@ CREATE TABLE users (
     `email` VARCHAR(100) NOT NULL,
     `password` VARCHAR(20) NOT NULL,
     `token` VARCHAR(24),
+    `tokenCreation` DATETIME,
     `aboID` INTEGER NOT NULL,
     `addressID` INTEGER
 );
@@ -75,6 +76,7 @@ CREATE TABLE address (
 
 CREATE TABLE chat (
     `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
+    `userID` INTEGER,
     `name` VARCHAR(20)
 );
 
@@ -112,6 +114,8 @@ ALTER TABLE users ADD FOREIGN KEY (aboID) REFERENCES abo (ID);
 ALTER TABLE vehicle ADD FOREIGN KEY (tagID) REFERENCES tag (ID);
 
 ALTER TABLE users ADD FOREIGN KEY (addressID) REFERENCES address (ID);
+
+ALTER TABLE chat ADD FOREIGN KEY (userID) REFERENCES users (ID);
 
 ALTER TABLE user_time ADD FOREIGN KEY (userID) REFERENCES users (ID);
 ALTER TABLE user_time ADD FOREIGN KEY (timeID) REFERENCES time (ID);

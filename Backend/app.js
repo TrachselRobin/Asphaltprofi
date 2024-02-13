@@ -154,6 +154,111 @@ APP.delete('/user/:id', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
+APP.post('/user/:id/car', async (req, res) => {
+    const USERID = req.params.id;
+    const BODY = req.body;
+    const CAR = {brand: BODY.brand, model: BODY.model, image: BODY.image, year: BODY.year, hp: BODY.hp, ccm: BODY.ccm, tagID: BODY.tagID};
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `INSERT INTO vehicle (brand, model, image, year, hp, ccm, tagID) VALUES ('${CAR.brand}', '${CAR.model}', '${CAR.image}', ${CAR.year}, ${CAR.hp}, ${CAR.ccm}, ${CAR.tagID})`;
+    result = await sqlQuery(sql);
+    const CARID = result.insertId;
+
+    sql = `INSERT INTO user_vehicle (userID, vehicleID) VALUES (${USERID}, ${CARID})`;
+    result = await sqlQuery(sql);
+
+    res.send("Car added");
+
+    log(req, res, "SUCCESS");
+});
+
+// get cars of user
+APP.get('/user/:id/cars', async (req, res) => {
+    const USERID = req.params.id;
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    const SQL = `SELECT * FROM vehicle WHERE ID IN (SELECT vehicleID FROM user_vehicle WHERE userID = ${USERID})`;
+    result = await sqlQuery(SQL);
+    res.send(result);
+
+    log(req, res, "SUCCESS");
+});
+
+// delete car of user
+APP.delete('/user/:id/car/:carID', async (req, res) => {
+    const USERID = req.params.id;
+    const CARID = req.params.carID;
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if car id exists
+    result = await userCarExists(USERID, CARID);
+    if (!result) {
+        res.status(404).send("Car not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    let sql = `DELETE FROM user_vehicle WHERE userID = ${USERID} AND vehicleID = ${CARID}`;
+    result = await sqlQuery(sql);
+
+    sql = `DELETE FROM vehicle WHERE ID = ${CARID}`;
+    result = await sqlQuery(sql);
+    res.send("Car deleted");
+
+    log(req, res, "SUCCESS");
+});
+
+// update car of user
+APP.put('/user/:id/car/:carID', async (req, res) => {
+    const USERID = req.params.id;
+    const CARID = req.params.carID;
+    const BODY = req.body;
+    const CAR = {brand: BODY.brand, model: BODY.model, image: BODY.image, year: BODY.year, hp: BODY.hp, ccm: BODY.ccm, tagID: BODY.tagID};
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if car id exists
+    result = await userCarExists(USERID, CARID);
+    if (!result) {
+        res.status(404).send("Car not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    let sql = `UPDATE vehicle SET brand = '${CAR.brand}', model = '${CAR.model}', image = '${CAR.image}', year = ${CAR.year}, hp = ${CAR.hp}, ccm = ${CAR.ccm}, tagID = ${CAR.tagID} WHERE ID = ${CARID}`;
+    result = await sqlQuery(sql);
+    res.send("Car updated");
+
+    log(req, res, "SUCCESS");
+});
+
 APP.post('/login', async (req, res) => {
     const BODY = req.body;
     const USER = {email: BODY.email, password: BODY.password};
@@ -185,7 +290,8 @@ APP.post('/login', async (req, res) => {
     }
 
     const TOKEN = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    sql = `UPDATE users SET token = '${TOKEN}' WHERE email = '${USER.email}' AND password = '${USER.password}'`;
+    // update token and tokenCreation to current time
+    sql = `UPDATE users SET token = '${TOKEN}', tokenCreation = NOW() WHERE email = '${USER.email}' AND password = '${USER.password}'`;
     result = await sqlQuery(sql);
 
     res.send(TOKEN);
@@ -193,23 +299,240 @@ APP.post('/login', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
-// verify: check if user is logged in
-APP.get('/verify', async (req, res) => {
-    const TOKEN = req.headers.authorization;
+// verify token
+APP.get('/verify/:id', async (req, res) => {
+    const TOKEN = req.params.id;
     if (TOKEN === undefined) {
         res.status(401).send("Not logged in");
         log(req, res, "ERROR");
         return;
     }
 
-    const SQL = `SELECT * FROM users WHERE token = '${TOKEN}'`;
-    const RESULT = await sqlQuery(SQL);
-    if (RESULT.length === 0) {
+    let sql = `SELECT * FROM users WHERE token = '${TOKEN}'`;
+    let result = await sqlQuery(sql);
+    if (result.length === 0) {
         res.status(401).send("Not logged in");
         log(req, res, "ERROR");
         return;
     }
+
+    // if token is older than 30 minutes, delete it
+    sql = `SELECT tokenCreation FROM users WHERE token = '${TOKEN}'`;
+    const TOKENCREATION = await sqlQuery(sql);
+    if (TOKENCREATION[0].tokenCreation < new Date(Date.now() - 30*60*1000)) {
+        sql = `UPDATE users SET token = NULL WHERE token = '${TOKEN}'`;
+        result = await sqlQuery(sql);
+        res.status(401).send("Token expired");
+        log(req, res, "ERROR");
+        return;
+    } else {
+        // refresh tokenCreation
+        sql = `UPDATE users SET tokenCreation = NOW() WHERE token = '${TOKEN}'`;
+        result = await sqlQuery(sql);
+    }
+
     res.send("Logged in");
+
+    log(req, res, "SUCCESS");
+});
+
+// logout
+APP.delete('/logout', async (req, res) => {
+    const TOKEN = req.body.token;
+    if (TOKEN === undefined) {
+        res.status(401).send("Not logged in");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if token exists
+    let sql = `SELECT * FROM users WHERE token = '${TOKEN}'`;
+    let result = await sqlQuery(sql);
+    if (result.length === 0) {
+        res.status(401).send("Token not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `UPDATE users SET token = NULL WHERE token = '${TOKEN}'`;
+    result = await sqlQuery(sql);
+    res.send("Logged out");
+
+    log(req, res, "SUCCESS");
+});
+
+// add friend
+APP.post('/user/:id/friend', async (req, res) => {
+    const USERID = req.params.id;
+    const FRIENDID = req.body.friendID;
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if friend id exists
+    result = await userIdExists(FRIENDID);
+    if (!result) {
+        res.status(404).send("Friend not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if friend is already a friend
+    let sql = `SELECT * FROM user_friend WHERE userID = ${USERID} AND friendID = ${FRIENDID}`;
+    result = await sqlQuery(sql);
+    if (result.length !== 0) {
+        res.status(409).send("Friend already added");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if friend id is the same as user id
+    if (USERID == FRIENDID) {
+        res.status(409).send("Cannot add yourself as friend");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `INSERT INTO user_friend (userID, friendID) VALUES (${USERID}, ${FRIENDID})`;
+    result = await sqlQuery(sql);
+    res.send("Friend added");
+
+    log(req, res, "SUCCESS");
+});
+
+// delete friend
+APP.delete('/user/:id/friend', async (req, res) => {
+    const USERID = req.params.id;
+    const FRIENDID = req.body.friendID;
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if friend id exists
+    result = await userIdExists(FRIENDID);
+    if (!result) {
+        res.status(404).send("Friend not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if friend is already a friend
+    let sql = `SELECT * FROM user_friend WHERE userID = ${USERID} AND friendID = ${FRIENDID}`;
+    result = await sqlQuery(sql);
+    if (result.length === 0) {
+        res.status(404).send("Friend not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `DELETE FROM user_friend WHERE userID = ${USERID} AND friendID = ${FRIENDID}`;
+    result = await sqlQuery(sql);
+    res.send("Friend deleted");
+
+    log(req, res, "SUCCESS");
+});
+
+// get friends
+APP.get('/user/:id/friends', async (req, res) => {
+    const USERID = req.params.id;
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    const SQL = `SELECT * FROM users WHERE ID IN (SELECT friendID FROM user_friend WHERE userID = ${USERID})`;
+    result = await sqlQuery(SQL);
+    res.send(result);
+
+    log(req, res, "SUCCESS");
+});
+
+// add time
+APP.post('/user/:id/time', async (req, res) => {
+    const USERID = req.params.id;
+    const BODY = req.body;
+    const TIME = {start: BODY.start, end: BODY.end};
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `INSERT INTO time (start, end) VALUES ('${TIME.start}', '${TIME.end}')`;
+    result = await sqlQuery(sql);
+    const TIMEID = result.insertId;
+
+    sql = `INSERT INTO user_time (userID, timeID) VALUES (${USERID}, ${TIMEID})`;
+    result = await sqlQuery(sql);
+    res.send("Time added");
+
+    log(req, res, "SUCCESS");
+});
+
+// get times of user
+APP.get('/user/:id/times', async (req, res) => {
+    const USERID = req.params.id;
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    const SQL = `SELECT * FROM time WHERE ID IN (SELECT timeID FROM user_time WHERE userID = ${USERID})`;
+    result = await sqlQuery(SQL);
+    res.send(result);
+
+    log(req, res, "SUCCESS");
+});
+
+// delete time of user
+APP.delete('/user/:id/time', async (req, res) => {
+    const USERID = req.params.id;
+    const TIMEID = req.body.timeID;
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if time id exists
+    let sql = `SELECT * FROM user_time WHERE userID = ${USERID} AND timeID = ${TIMEID}`;
+    result = await sqlQuery(sql);
+    if (result.length === 0) {
+        res.status(404).send("Time not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `DELETE FROM user_time WHERE userID = ${USERID} AND timeID = ${TIMEID}`;
+    result = await sqlQuery(sql);
+
+    sql = `DELETE FROM time WHERE ID = ${TIMEID}`;
+    result = await sqlQuery(sql);
+    res.send("Time deleted");
 
     log(req, res, "SUCCESS");
 });
@@ -219,7 +542,7 @@ APP.listen(PORT, () => {
 });
 
 function log(req, res, tag = "INFO") {
-    message = `${format(req.method, 6)} ${format(req.url, 25)} ${res.statusCode}`;
+    message = `${format(req.method, 6)} ${format(req.url, 35)} ${res.statusCode}`;
     switch (tag) {
         case "INFO":
             break;
@@ -312,4 +635,11 @@ async function getUser(ID) {
     
     
     return RESULT[0];
+}
+
+async function userCarExists(userID, carID) {
+    // true if exists, false if not
+    const SQL = `SELECT * FROM user_vehicle WHERE userID = ${userID} AND vehicleID = ${carID}`;
+    const RESULT = await sqlQuery(SQL);
+    return RESULT.length !== 0;
 }
