@@ -8,6 +8,13 @@ const credentials = require('./credentials.json');
 
 APP.use(express.json());
 
+APP.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
+    res.header("Access-Control-Allow-Headers", "Content-Type"); 
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    next();
+});
+
 APP.get('/', async (req, res) => {
     const TOKEN = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     res.send(TOKEN + " " + TOKEN.length);
@@ -294,7 +301,8 @@ APP.post('/login', async (req, res) => {
     sql = `UPDATE users SET token = '${TOKEN}', tokenCreation = NOW() WHERE email = '${USER.email}' AND password = '${USER.password}'`;
     result = await sqlQuery(sql);
 
-    res.send(TOKEN);
+    // send token as json
+    res.send({token: TOKEN});
 
     log(req, res, "SUCCESS");
 });
