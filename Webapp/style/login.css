@@ -1,0 +1,79 @@
+:root {
+    --background: #11001C;
+    --gray: #3C3C3C;
+    --primary: #290025;
+    --secondary: #35012C;
+    --tertiary: #4F0147;
+    --quaternary: #3A015C;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    background-color: whitesmoke;
+    padding: 5rem;
+    border-radius: 1rem;
+}
+
+form input {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: white;
+}
+
+form label {
+    margin-top: 1rem;
+}
+
+form input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--primary);
+}
+
+/* type submit */
+form input[type="submit"] {
+    background-color: var(--tertiary);
+    color: white;
+    cursor: pointer;
+}
+
+form input[type="submit"]:hover {
+    background-color: var(--quaternary);
+}
+
+svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: blur(100px) brightness(20);
+}
+
+#errorEmail,
+#errorPassword {
+    color: red;
+    font-size: 0.8rem;
+    display: none;
+    margin: 0.5rem 0 0 0;
+}
