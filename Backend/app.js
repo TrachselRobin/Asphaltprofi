@@ -537,31 +537,48 @@ APP.delete('/user/:id/time', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
-// create chat with a friend
+// Show leaderboard of users with best time
 /*
-CREATE TABLE chat (
-    `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
-    `userID` INTEGER,
-    `name` VARCHAR(20)
-);
-
-CREATE TABLE message (
-    `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
-    `text` VARCHAR(100),
-    `time` DATETIME,
-    `userID` INTEGER
-);
-
-CREATE TABLE chat_message (
-    `chatID` INTEGER, 
-    `messageID` INTEGER
-);
-
-CREATE TABLE user_chat (
-    `userID` INTEGER, 
-    `chatID` INTEGER
-);
+It should return the top 10 users with the best time:
+[
+    {
+        "user": {
+            "ID": 1,
+            "username": "user1"
+        },
+        "time": "00:00:00"
+    },
+    {
+        "user": {
+            "ID": 2,
+            "username": "user2"
+        },
+        "time": "00:00:00"
+    },
+    ...
+]
 */
+APP.get('/leaderboard', async (req, res) => {
+    // get top times from table time order by (end - start)
+    let result = [];
+    let sql = `SELECT * FROM time ORDER BY (end - start) LIMIT 10`;
+    const TIMES = await sqlQuery(sql);
+
+    // get user of each time by timeID from table user_time
+    for (let i = 0; i < TIMES.length; i++) {
+        sql = `SELECT userID FROM user_time WHERE timeID = ${TIMES[i].ID}`;
+        const USERID = await sqlQuery(sql);
+        sql = `SELECT ID, username FROM users WHERE ID = ${USERID[0].userID}`;
+        const USER = await sqlQuery(sql);
+        result.push({user: USER[0], time: TIMES[i]});
+    }
+    
+    res.send(result);
+
+    log(req, res, "SUCCESS");
+});
+
+// create chat with a friend
 APP.post('/user/:id/chat', async (req, res) => {
     const USERID = req.params.id;
     const BODY = req.body;
@@ -895,6 +912,7 @@ POST /user/1/friend
 DELETE /user/1/friend
 
 GET /user/1/times
+GET /leaderboard
 POST /user/1/time
 DELETE /user/1/time
 
