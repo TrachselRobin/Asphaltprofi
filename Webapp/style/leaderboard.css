@@ -1,0 +1,54 @@
+* {
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Definiere eine Schriftart für die gesamte Tabelle */
+#leaderboard {
+    width: 100%;
+}
+
+/* Füge einen Rahmen um die Tabelle und jede Zelle hinzu */
+#leaderboard, #leaderboard th, #leaderboard td {
+    border: 0px solid black;
+    border-collapse: collapse;
+}
+
+/* Zentriere den Text in jeder Zelle */
+#leaderboard th, #leaderboard td {
+    text-align: center;
+}
+
+/* Färbe die Kopfzeile der Tabelle dunkelgrau ein */
+#leaderboard th {
+    background-color: #333333;
+    color: white;
+}
+
+/* Färbe jede zweite Zeile der Tabelle hellgrau ein */
+#leaderboard tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Füge etwas Abstand zwischen den Zellen hinzu */
+#leaderboard th, #leaderboard td {
+    padding: 10px;
+}
+
+/* first column left aligned and not that wide */
+#leaderboard th:first-child, #leaderboard td:first-child {
+    text-align: left;
+    width: 10%;
+}
+
+/* last column right aligned and not that wide */
+#leaderboard th:last-child, #leaderboard td:last-child {
+    text-align: right;
+    width: 10%;
+}

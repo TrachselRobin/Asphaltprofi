@@ -4,23 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style/index.css">
+    <script src="./script/index.js"></script>
     <title>AsphaltProfi | WebApp</title>
 </head>
 <body>
     <header>
         <nav id="topNav">
-            <ul>
-                <li><a href="#"><img src="./images/menu.png" alt="menu"></a></li>
-                <li><a href="#"><img src="./images/search.png" alt="search"></a></li>
-                <li><a href="#"><img src="./images/notifications.png" alt="notifications"></a></li>
+            <ul id="topNavLeft">
+                <li><a href="#"><img src="./images/AsphaltProfiLogo.svg" alt="logo"></a></li>
+                <li><a href="#"><h1>Asphalt<b>Profi</b></h1></a></li>
             </ul>
-            <ul>
-                <li><a href="./login.html" class="notLoggedIn">Anmelden</a></li>
+            <ul id="topNavRight">
+                <li class="notLogedIn"><a id="login" href="./login.html">Anmelden</a></li>
+                <li class="notLogedIn"><a id="register" href="./register.html">Registrieren</a></li>
+                <li class="logedIn"><button id="logout" onclick="logout()">Abmelden</button></li>
             </ul>
         </nav>
     </header>
     <main>
-        
+        <iframe src="./leaderboard.html" title="content" frameborder="0"></iframe>
     </main>
     <footer>
         <nav id="bottomNav">

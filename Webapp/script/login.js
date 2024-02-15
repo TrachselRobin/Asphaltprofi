@@ -31,59 +31,93 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, 1000 / 60);
 
-    const loginForm = document.getElementById('loginForm');
-    const submitButton = document.getElementById('loginButton');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const errorEmail = document.getElementById('errorEmail');
-    const errorPassword = document.getElementById('errorPassword');
+    const LOGINFORM = document.getElementById('loginForm');
+    const SUBMITBUTTON = document.getElementById('loginButton');
+    const EMAILINPUT = document.getElementById('email');
+    const PASSWORDINPUT = document.getElementById('password');
+    const ERROREMAIL = document.getElementById('errorEmail');
+    const ERRORPASSWORD = document.getElementById('errorPassword');
 
-    emailInput.addEventListener('input', () => {
-        if (emailInput.value.length > 0) {
-            errorEmail.style.display = 'none';
+    EMAILINPUT.addEventListener('input', () => {
+        if (EMAILINPUT.value.length > 0) {
+            ERROREMAIL.style.display = 'none';
         } else {
-            errorEmail.style.display = 'block';
+            ERROREMAIL.style.display = 'block';
         }
     });
 
-    passwordInput.addEventListener('input', () => {
-        if (passwordInput.value.length > 0) {
-            errorPassword.style.display = 'none';
+    PASSWORDINPUT.addEventListener('input', () => {
+        if (PASSWORDINPUT.value.length > 0) {
+            ERRORPASSWORD.style.display = 'none';
         } else {
-            errorPassword.style.display = 'block';
+            ERRORPASSWORD.style.display = 'block';
         }
     });
 
-    loginForm.addEventListener('submit', (event) => {
+    LOGINFORM.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        if (emailInput.value.length === 0) {
-            errorEmail.style.display = 'block';
+        if (EMAILINPUT.value.length === 0) {
+            ERROREMAIL.style.display = 'block';
         }
 
-        if (passwordInput.value.length === 0) {
-            errorPassword.style.display = 'block';
+        if (PASSWORDINPUT.value.length === 0) {
+            ERRORPASSWORD.style.display = 'block';
         }
 
-        if (emailInput.value.length > 0 && passwordInput.value.length > 0) {
-            submitButton.disabled = true;
-            submitButton.style.cursor = 'not-allowed';
-            submitButton.style.backgroundColor = '#ccc';
-            fetch('http://localhost:3000/login', {
-                method: "POST",
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  email: "hans@muster.ch",
-                  password: "1234"
-                })
-            }).then(response => {
-                console.log(response);
-            }).catch(error => {
-                console.log(error);
-            });
+        if (EMAILINPUT.value.length > 0 && PASSWORDINPUT.value.length > 0) {
+            SUBMITBUTTON.disabled = true;
+            SUBMITBUTTON.style.cursor = 'not-allowed';
+            SUBMITBUTTON.style.backgroundColor = '#ccc';
+            
+            login();
         }
     });
 });
+
+async function login() {
+    const EMAIL = document.getElementById('email').value;
+    const PASSWORD = document.getElementById('password').value;
+
+    const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            email: EMAIL, 
+            password: PASSWORD
+        }),
+    });
+
+    const data = await response.text();
+    const status = response.status;
+    const SUBMITBUTTON = document.getElementById('loginButton');
+
+    if (status === 200) {
+        // data is a token. Create a token with this string and store it in the local storage
+        localStorage.setItem('token', data);
+        window.location.href = './index.html';
+    } else if (status === 401 || status === 404) {
+        const ERROR = document.getElementById('error');
+        ERROR.innerText = 'E-Mail oder Passwort ist falsch!';
+        ERROR.style.display = 'block';
+        SUBMITBUTTON.disabled = false;
+        SUBMITBUTTON.style.cursor = 'pointer';
+        SUBMITBUTTON.style.backgroundColor = '#4F0147';
+    } else if (status === 409) {
+        const ERROR = document.getElementById('error');
+        ERROR.innerText = 'Benutzer bereits angemeldet!';
+        ERROR.style.display = 'block';
+        SUBMITBUTTON.disabled = false;
+        SUBMITBUTTON.style.cursor = 'pointer';
+        SUBMITBUTTON.style.backgroundColor = '#4F0147';
+    } else {
+        const ERROR = document.getElementById('error');
+        ERROR.innerText = 'Ein Fehler ist aufgetreten!';
+        ERROR.style.display = 'block';
+        SUBMITBUTTON.disabled = false;
+        SUBMITBUTTON.style.cursor = 'pointer';
+        SUBMITBUTTON.style.backgroundColor = '#4F0147';
+    }
+}

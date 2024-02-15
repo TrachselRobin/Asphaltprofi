@@ -71,7 +71,8 @@ svg {
 }
 
 #errorEmail,
-#errorPassword {
+#errorPassword,
+#error {
     color: red;
     font-size: 0.8rem;
     display: none;

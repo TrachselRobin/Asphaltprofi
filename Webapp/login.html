@@ -11,10 +11,11 @@
     <form id="loginForm" action="">
         <label for="email">E-Mail:</label>
         <input type="text" name="email" id="email" placeholder="example@example.ch" autocomplete="email">
-        <p id="errorEmail">E-Mail falsch oder existiert nicht</p>
+        <p id="errorEmail">Feld darf nicht leer sein!</p>
         <label for="password">Passwort:</label>
         <input type="password" name="password" id="password" autocomplete="current-password">
-        <p id="errorPassword">Passwort falsch</p>
+        <p id="errorPassword">Feld darf nicht leer sein!</p>
+        <p id="error">E-Mail oder Passwort falsch</p>
         <input type="submit" value="Anmelden" id="loginButton">
     </form>
 
