@@ -302,7 +302,7 @@ APP.post('/login', async (req, res) => {
     result = await sqlQuery(sql);
 
     // send token as json
-    res.send({token: TOKEN});
+    res.send(TOKEN);
 
     log(req, res, "SUCCESS");
 });
