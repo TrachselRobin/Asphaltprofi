@@ -640,7 +640,7 @@ It should return the top 10 users with the best time:
 APP.get('/leaderboard', async (req, res) => {
     // get top times from table time order by (end - start)
     let result = [];
-    let sql = `SELECT * FROM time ORDER BY (end - start) LIMIT 10`;
+    let sql = `SELECT * FROM time ORDER BY (end - start) LIMIT 20`;
     result = await sqlQuery(sql);
 
     for (let i = 0; i < result.length; i++) {

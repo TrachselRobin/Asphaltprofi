@@ -52,3 +52,15 @@ body {
     text-align: right;
     width: 10%;
 }
+
+#loader {
+    position: absolute;
+    opacity: 0.5;
+    top: 0;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+}
+
+.hidden {
+    display: none;
+}
