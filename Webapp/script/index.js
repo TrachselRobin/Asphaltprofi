@@ -1,8 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // add class "hidden" to every every element with class "logedIn"
-    // verify if the user is loged in
-    // if the user is loged in, remove the class "hidden" from every element with class "logedIn"
-    // if the user is not loged in, remove the class "hidden" from every element with class "notLogedIn"
+    const SEARCH = document.getElementById('search');
+    const LEADERBOARD = document.getElementById('leaderboard');
+    const PROFILE = document.getElementById('profile');
+    const IFRAME = document.getElementById('iframe');
+
+    SEARCH.addEventListener('click', function() {
+        IFRAME.src = './search.html';
+    });
+
+    LEADERBOARD.addEventListener('click', function() {
+        IFRAME.src = './leaderboard.html';
+    });
+
+    PROFILE.addEventListener('click', function() {
+        IFRAME.src = './profile.html';
+    });
     
     const logedInElements = document.querySelectorAll('.logedIn');
     logedInElements.forEach((element) => {
@@ -15,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     verify().then((result) => {
-        console.log(result);
         if (result) {
             logedInElements.forEach((element) => {
                 element.classList.remove('hidden');
@@ -29,8 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function verify() {
     const response = await fetch(`http://localhost:3000/verify/${localStorage.getItem('token')}`);
-    const data = await response.text();
-    console.log(data);
     if (response.status === 200) {
         return true;
     } else {
@@ -46,8 +55,6 @@ async function logout() {
         },
         body: JSON.stringify({ token: localStorage.getItem('token') })
     });
-    const data = await response.text();
-    console.log(data);
     if (response.status === 200) {
         localStorage.removeItem('token');
         window.location.reload();
