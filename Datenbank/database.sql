@@ -52,8 +52,8 @@ CREATE TABLE tag (
 
 CREATE TABLE time (
     `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
-    `start` DATETIME,
-    `end` DATETIME
+    `start` DATETIME(3),
+    `end` DATETIME(3)
 );
 
 CREATE TABLE vehicle_time (
