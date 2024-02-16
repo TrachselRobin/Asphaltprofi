@@ -1,10 +1,6 @@
-DROP DATABASE IF EXISTS nunapuki_users;
-CREATE DATABASE nunapuki_users;
-
 USE nunapuki_users;
 
-/*
-DROP TABLE IF EXISTS user_time;
+DROP TABLE IF EXISTS vehicle_time;
 DROP TABLE IF EXISTS user_chat;
 DROP TABLE IF EXISTS chat_message;
 DROP TABLE IF EXISTS user_vehicle;
@@ -17,7 +13,6 @@ DROP TABLE IF EXISTS abo;
 DROP TABLE IF EXISTS vehicle;
 DROP TABLE IF EXISTS tag;
 DROP TABLE IF EXISTS time;
-*/
 
 CREATE TABLE users (
 	`ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID), 
@@ -61,8 +56,8 @@ CREATE TABLE time (
     `end` DATETIME
 );
 
-CREATE TABLE user_time (
-    `userID` INTEGER, 
+CREATE TABLE vehicle_time (
+    `vehicleID` INTEGER, 
     `timeID` INTEGER
 );
 
@@ -77,6 +72,7 @@ CREATE TABLE address (
 CREATE TABLE chat (
     `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
     `userID` INTEGER,
+    `user2ID` INTEGER,
     `name` VARCHAR(20)
 );
 
@@ -116,9 +112,10 @@ ALTER TABLE vehicle ADD FOREIGN KEY (tagID) REFERENCES tag (ID);
 ALTER TABLE users ADD FOREIGN KEY (addressID) REFERENCES address (ID);
 
 ALTER TABLE chat ADD FOREIGN KEY (userID) REFERENCES users (ID);
+ALTER TABLE chat ADD FOREIGN KEY (user2ID) REFERENCES users (ID);
 
-ALTER TABLE user_time ADD FOREIGN KEY (userID) REFERENCES users (ID);
-ALTER TABLE user_time ADD FOREIGN KEY (timeID) REFERENCES time (ID);
+ALTER TABLE vehicle_time ADD FOREIGN KEY (vehicleID) REFERENCES vehicle (ID);
+ALTER TABLE vehicle_time ADD FOREIGN KEY (timeID) REFERENCES time (ID);
 
 ALTER TABLE user_chat ADD FOREIGN KEY (userID) REFERENCES users (ID);
 ALTER TABLE user_chat ADD FOREIGN KEY (chatID) REFERENCES chat (ID);

@@ -82,14 +82,14 @@ APP.post('/user', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
-APP.put('/user/:id', async (req, res) => {
+APP.put('/user', async (req, res) => {
     const BODY = req.body;
-    const USEROLD = await getUser(req.params.id);
+    const USEROLD = await getUser(BODY.userID);
     const USER = {prename: BODY.prename, name: BODY.name, birthdate: BODY.birthdate, username: BODY.username, email: BODY.email, password: BODY.password};
     const ADDRESS = {street: BODY.street, city: BODY.city, zip: BODY.zip, number: BODY.number, addressID: undefined};
     
     // check if user id exists
-    let result = await userIdExists(req.params.id);
+    let result = await userIdExists(BODY.userID);
     if (!result) {
         res.status(404).send("User not found");
         log(req, res, "ERROR");
@@ -126,7 +126,7 @@ APP.put('/user/:id', async (req, res) => {
         ADDRESS.addressID = result.insertId;
     }
 
-    sql = `UPDATE users SET prename = '${USER.prename}', name = '${USER.name}', birthdate = '${USER.birthdate}', username = '${USER.username}', email = '${USER.email}', password = '${USER.password}', addressID = ${ADDRESS.addressID} WHERE ID = ${req.params.id}`;
+    sql = `UPDATE users SET prename = '${USER.prename}', name = '${USER.name}', birthdate = '${USER.birthdate}', username = '${USER.username}', email = '${USER.email}', password = '${USER.password}', addressID = ${ADDRESS.addressID} WHERE ID = ${BODY.userID}`;
     result = await sqlQuery(sql);
 
     res.send("User updated");
@@ -134,8 +134,8 @@ APP.put('/user/:id', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
-APP.delete('/user/:id', async (req, res) => {
-    const USERID = req.params.id;
+APP.delete('/user', async (req, res) => {
+    const USERID = req.body.userID;
     const USER = await getUser(USERID);
     
     // check if user id exists
@@ -161,8 +161,8 @@ APP.delete('/user/:id', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
-APP.post('/user/:id/car', async (req, res) => {
-    const USERID = req.params.id;
+APP.post('/user/car', async (req, res) => {
+    const USERID = req.body.userID;
     const BODY = req.body;
     const CAR = {brand: BODY.brand, model: BODY.model, image: BODY.image, year: BODY.year, hp: BODY.hp, ccm: BODY.ccm, tagID: BODY.tagID};
     
@@ -186,7 +186,27 @@ APP.post('/user/:id/car', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
-// get cars of user
+// returns a json of every car and its times like following
+/*
+{
+    "car": {
+        "brand": "brand",
+        "model": "model",
+        "image": "image",
+        "year": "year",
+        "hp": "hp",
+        "ccm": "ccm",
+        "tagID": "tagID",
+        "times": [
+            {
+                "start": "start",
+                "end": "end"
+            },
+            ...
+        ]
+    }
+}
+*/
 APP.get('/user/:id/cars', async (req, res) => {
     const USERID = req.params.id;
     
@@ -200,15 +220,74 @@ APP.get('/user/:id/cars', async (req, res) => {
 
     const SQL = `SELECT * FROM vehicle WHERE ID IN (SELECT vehicleID FROM user_vehicle WHERE userID = ${USERID})`;
     result = await sqlQuery(SQL);
-    res.send(result);
+
+    for (let i = 0; i < result.length; i++) {
+        const SQL = `SELECT * FROM time WHERE ID IN (SELECT timeID FROM vehicle_time WHERE vehicleID = ${result[i].ID})`;
+        const TIMES = await sqlQuery(SQL);
+        result[i].times = TIMES;
+    }
+    
+    res.json(result);
+
+    log(req, res, "SUCCESS");
+});
+
+// sends a json of the car with the given carID like following
+/*
+{
+    "brand": "brand",
+    "model": "model",
+    "image": "image",
+    "year": "year",
+    "hp": "hp",
+    "ccm": "ccm",
+    "tagID": "tagID",
+    "times": [
+        {
+            "start": "start",
+            "end": "end"
+        },
+        ...
+    ]
+}
+*/
+APP.get('/user/:id/car/:carID', async (req, res) => {
+    const USERID = req.params.id;
+    const CARID = req.params.carID;
+    
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if car id exists
+    result = await userCarExists(USERID, CARID);
+    if (!result) {
+        res.status(404).send("Car not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `SELECT * FROM vehicle WHERE ID = ${CARID}`;
+    result = await sqlQuery(sql);
+    const CAR = result[0];
+
+    sql = `SELECT * FROM time WHERE ID IN (SELECT timeID FROM vehicle_time WHERE vehicleID = ${CARID})`;
+    const TIMES = await sqlQuery(sql);
+    CAR.times = TIMES;
+
+    res.json(CAR);
 
     log(req, res, "SUCCESS");
 });
 
 // delete car of user
-APP.delete('/user/:id/car/:carID', async (req, res) => {
-    const USERID = req.params.id;
-    const CARID = req.params.carID;
+APP.delete('/user/car', async (req, res) => {
+    const USERID = req.body.userID;
+    const CARID = req.body.carID;
     
     // check if user id exists
     let result = await userIdExists(USERID);
@@ -237,9 +316,9 @@ APP.delete('/user/:id/car/:carID', async (req, res) => {
 });
 
 // update car of user
-APP.put('/user/:id/car/:carID', async (req, res) => {
-    const USERID = req.params.id;
-    const CARID = req.params.carID;
+APP.put('/user/car', async (req, res) => {
+    const USERID = req.body.userID;
+    const CARID = req.body.carID;
     const BODY = req.body;
     const CAR = {brand: BODY.brand, model: BODY.model, image: BODY.image, year: BODY.year, hp: BODY.hp, ccm: BODY.ccm, tagID: BODY.tagID};
     
@@ -370,8 +449,8 @@ APP.delete('/logout', async (req, res) => {
 });
 
 // add friend
-APP.post('/user/:id/friend', async (req, res) => {
-    const USERID = req.params.id;
+APP.post('/user/friend', async (req, res) => {
+    const USERID = req.body.userID;
     const FRIENDID = req.body.friendID;
     
     // check if user id exists
@@ -414,8 +493,8 @@ APP.post('/user/:id/friend', async (req, res) => {
 });
 
 // delete friend
-APP.delete('/user/:id/friend', async (req, res) => {
-    const USERID = req.params.id;
+APP.delete('/user/friend', async (req, res) => {
+    const USERID = req.body.userID;
     const FRIENDID = req.body.friendID;
     
     // check if user id exists
@@ -470,15 +549,24 @@ APP.get('/user/:id/friends', async (req, res) => {
 });
 
 // add time
-APP.post('/user/:id/time', async (req, res) => {
-    const USERID = req.params.id;
+APP.post('/user/car/time', async (req, res) => {
     const BODY = req.body;
     const TIME = {start: BODY.start, end: BODY.end};
-    
+    const USERID = BODY.userID;
+    const CARID = BODY.carID;
+
     // check if user id exists
     let result = await userIdExists(USERID);
     if (!result) {
         res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if car id exists
+    result = await userCarExists(USERID, CARID);
+    if (!result) {
+        res.status(404).send("Car not found");
         log(req, res, "ERROR");
         return;
     }
@@ -487,35 +575,17 @@ APP.post('/user/:id/time', async (req, res) => {
     result = await sqlQuery(sql);
     const TIMEID = result.insertId;
 
-    sql = `INSERT INTO user_time (userID, timeID) VALUES (${USERID}, ${TIMEID})`;
+    sql = `INSERT INTO vehicle_time (vehicleID, timeID) VALUES (${CARID}, ${TIMEID})`;
     result = await sqlQuery(sql);
+
     res.send("Time added");
 
     log(req, res, "SUCCESS");
 });
 
-// get times of user
-APP.get('/user/:id/times', async (req, res) => {
-    const USERID = req.params.id;
-    
-    // check if user id exists
-    let result = await userIdExists(USERID);
-    if (!result) {
-        res.status(404).send("User not found");
-        log(req, res, "ERROR");
-        return;
-    }
-
-    const SQL = `SELECT * FROM time WHERE ID IN (SELECT timeID FROM user_time WHERE userID = ${USERID})`;
-    result = await sqlQuery(SQL);
-    res.send(result);
-
-    log(req, res, "SUCCESS");
-});
-
 // delete time of user
-APP.delete('/user/:id/time', async (req, res) => {
-    const USERID = req.params.id;
+APP.delete('/user/car/time', async (req, res) => {
+    const USERID = req.body.userID;
     const TIMEID = req.body.timeID;
     
     // check if user id exists
@@ -527,7 +597,7 @@ APP.delete('/user/:id/time', async (req, res) => {
     }
 
     // check if time id exists
-    let sql = `SELECT * FROM user_time WHERE userID = ${USERID} AND timeID = ${TIMEID}`;
+    let sql = `SELECT * FROM vehicle_time WHERE timeID = ${TIMEID}`;
     result = await sqlQuery(sql);
     if (result.length === 0) {
         res.status(404).send("Time not found");
@@ -535,11 +605,12 @@ APP.delete('/user/:id/time', async (req, res) => {
         return;
     }
 
-    sql = `DELETE FROM user_time WHERE userID = ${USERID} AND timeID = ${TIMEID}`;
+    sql = `DELETE FROM vehicle_time WHERE timeID = ${TIMEID}`;
     result = await sqlQuery(sql);
 
     sql = `DELETE FROM time WHERE ID = ${TIMEID}`;
     result = await sqlQuery(sql);
+    
     res.send("Time deleted");
 
     log(req, res, "SUCCESS");
@@ -570,15 +641,19 @@ APP.get('/leaderboard', async (req, res) => {
     // get top times from table time order by (end - start)
     let result = [];
     let sql = `SELECT * FROM time ORDER BY (end - start) LIMIT 10`;
-    const TIMES = await sqlQuery(sql);
+    result = await sqlQuery(sql);
 
-    // get user of each time by timeID from table user_time
-    for (let i = 0; i < TIMES.length; i++) {
-        sql = `SELECT userID FROM user_time WHERE timeID = ${TIMES[i].ID}`;
+    for (let i = 0; i < result.length; i++) {
+        sql = `SELECT * FROM vehicle_time WHERE timeID = ${result[i].ID}`;
+        const CAR = await sqlQuery(sql);
+        sql = `SELECT userID FROM user_vehicle WHERE vehicleID = ${CAR[0].vehicleID}`;
         const USERID = await sqlQuery(sql);
         sql = `SELECT ID, username FROM users WHERE ID = ${USERID[0].userID}`;
         const USER = await sqlQuery(sql);
-        result.push({user: USER[0], time: TIMES[i]});
+        sql = `SELECT * FROM vehicle WHERE ID = ${CAR[0].vehicleID}`;
+        const VEHICLE = await sqlQuery(sql);
+        result[i].user = USER[0];
+        result[i].vehicle = VEHICLE[0];
     }
     
     res.send(result);
@@ -587,8 +662,8 @@ APP.get('/leaderboard', async (req, res) => {
 });
 
 // create chat with a friend
-APP.post('/user/:id/chat', async (req, res) => {
-    const USERID = req.params.id;
+APP.post('/user/chat', async (req, res) => {
+    const USERID = req.body.userID;
     const BODY = req.body;
     const CHAT = {name: BODY.name, friendID: BODY.friendID};
     
@@ -609,7 +684,7 @@ APP.post('/user/:id/chat', async (req, res) => {
     }
 
     // check if chat already exists
-    let sql = `SELECT * FROM chat WHERE userID = ${USERID} AND name = '${CHAT.name}'`;
+    let sql = `SELECT * FROM chat WHERE userID = ${USERID} OR userID = ${CHAT.friendID}`;
     result = await sqlQuery(sql);
     if (result.length !== 0) {
         res.status(409).send("Chat already exists");
@@ -617,7 +692,7 @@ APP.post('/user/:id/chat', async (req, res) => {
         return;
     }
 
-    sql = `INSERT INTO chat (userID, name) VALUES (${USERID}, '${CHAT.name}')`;
+    sql = `INSERT INTO chat (userID, user2ID, name) VALUES (${USERID}, ${CHAT.friendID}, '${CHAT.name}')`;
     result = await sqlQuery(sql);
     const CHATID = result.insertId;
 
@@ -643,6 +718,7 @@ APP.get('/user/:id/chats', async (req, res) => {
         return;
     }
 
+    // sql that gets all chats where USERID is equal to userID or user2ID
     const SQL = `SELECT * FROM chat WHERE ID IN (SELECT chatID FROM user_chat WHERE userID = ${USERID})`;
     result = await sqlQuery(SQL);
     res.send(result);
@@ -651,8 +727,8 @@ APP.get('/user/:id/chats', async (req, res) => {
 });
 
 // delete chat of user
-APP.delete('/user/:id/chat', async (req, res) => {
-    const USERID = req.params.id;
+APP.delete('/user/chat', async (req, res) => {
+    const USERID = req.body.userID;
     const CHATID = req.body.chatID;
     
     // check if user id exists
@@ -675,16 +751,23 @@ APP.delete('/user/:id/chat', async (req, res) => {
     sql = `DELETE FROM user_chat WHERE userID = ${USERID} AND chatID = ${CHATID}`;
     result = await sqlQuery(sql);
 
-    sql = `DELETE FROM chat WHERE ID = ${CHATID}`;
+    // after deleting user_chat, delete chat if no user_chat exists
+    sql = `SELECT * FROM user_chat WHERE chatID = ${CHATID}`;
     result = await sqlQuery(sql);
+    if (result.length === 0) {
+        sql = `DELETE FROM chat WHERE ID = ${CHATID}`;
+        result = await sqlQuery(sql);
+    }
+
+    
     res.send("Chat deleted");
 
     log(req, res, "SUCCESS");
 });
 
 // rename chat
-APP.put('/user/:id/chat', async (req, res) => {
-    const USERID = req.params.id;
+APP.put('/user/chat', async (req, res) => {
+    const USERID = req.body.userID;
     const CHATID = req.body.chatID;
     const NAME = req.body.name;
     
@@ -724,13 +807,14 @@ APP.get('/chat/:id/messages', async (req, res) => {
 });
 
 // add message to chat
-APP.post('/chat/:id/message', async (req, res) => {
-    const CHATID = req.params.id;
+APP.post('/chat/message', async (req, res) => {
     const BODY = req.body;
-    const MESSAGE = {text: BODY.text, time: BODY.time, userID: BODY.userID};
+    const CHATID = BODY.chatID;
+    const MESSAGE = { text: BODY.text, userID: BODY.userID };
     
     // check if chat id exists
-    let result = await userIdExists(CHATID);
+    let sql = `SELECT * FROM chat WHERE ID = ${CHATID}`;
+    let result = await sqlQuery(sql);
     if (!result) {
         res.status(404).send("Chat not found");
         log(req, res, "ERROR");
@@ -745,7 +829,7 @@ APP.post('/chat/:id/message', async (req, res) => {
         return;
     }
 
-    sql = `INSERT INTO message (text, time, userID) VALUES ('${MESSAGE.text}', '${MESSAGE.time}', ${MESSAGE.userID})`;
+    sql = `INSERT INTO message (text, time, userID) VALUES ('${MESSAGE.text}', NOW(), ${MESSAGE.userID})`;
     result = await sqlQuery(sql);
     const MESSAGEID = result.insertId;
 
@@ -757,12 +841,13 @@ APP.post('/chat/:id/message', async (req, res) => {
 });
 
 // delete message of chat
-APP.delete('/chat/:id/message', async (req, res) => {
-    const CHATID = req.params.id;
+APP.delete('/chat/message', async (req, res) => {
+    const CHATID = req.body.chatID;
     const MESSAGEID = req.body.messageID;
     
     // check if chat id exists
-    let result = await userIdExists(CHATID);
+    let sql = `SELECT * FROM chat WHERE ID = ${CHATID}`;
+    let result = await sqlQuery(sql);
     if (!result) {
         res.status(404).send("Chat not found");
         log(req, res, "ERROR");
@@ -770,7 +855,7 @@ APP.delete('/chat/:id/message', async (req, res) => {
     }
 
     // check if message id exists
-    let sql = `SELECT * FROM chat_message WHERE chatID = ${CHATID} AND messageID = ${MESSAGEID}`;
+    sql = `SELECT * FROM chat_message WHERE chatID = ${CHATID} AND messageID = ${MESSAGEID}`;
     result = await sqlQuery(sql);
     if (result.length === 0) {
         res.status(404).send("Message not found");
@@ -884,7 +969,6 @@ async function getUser(ID) {
     const SQL = `SELECT * FROM users WHERE ID = ${ID}`;
     const RESULT = await sqlQuery(SQL);
     
-    
     return RESULT[0];
 }
 
@@ -898,38 +982,40 @@ async function userCarExists(userID, carID) {
 /*
 All requests and example header and urls
 
-GET /
+GET http://localhost:3000/
 
-GET /users
-GET /user/1
-POST /user
-PUT /user/1
-DELETE /user/1
+GET http://localhost:3000/user/1000000000
+GET http://localhost:3000/users
+POST http://localhost:3000/user
+PUT http://localhost:3000/user
+DELETE http://localhost:3000/user
 
-GET /user/1/cars
-POST /user/1/car
-PUT /user/1/car/1
-DELETE /user/1/car/1
+GET http://localhost:3000/user/1000000000/cars
+POST http://localhost:3000/user/car
+PUT http://localhost:3000/user/car
+DELETE http://localhost:3000/user/car
 
-GET /verify/1
-POST /login
-DELETE /logout
+GET http://localhost:3000/verify/asdf9h4jn49houosd
+POST http://localhost:3000/login
+DELETE http://localhost:3000/logout
 
-GET /user/1/friends
-POST /user/1/friend
-DELETE /user/1/friend
+GET http://localhost:3000/user/1000000000/friends
+POST http://localhost:3000/user/friend
+DELETE http://localhost:3000/user/friend
 
-GET /user/1/times
-GET /leaderboard
-POST /user/1/time
-DELETE /user/1/time
+GET http://localhost:3000/user/1000000000/times
+POST http://localhost:3000/user/time
+DELETE http://localhost:3000/user/time
 
-GET /user/1/chats
-POST /user/1/chat
-PUT /user/1/chat
-DELETE /user/1/chat
+GET http://localhost:3000/leaderboard
 
-GET /chat/1/messages
-POST /chat/1/message
-DELETE /chat/1/message
+GET http://localhost:3000/user/1000000000/chats
+POST http://localhost:3000/user/chat
+DELETE http://localhost:3000/user/chat
+PUT http://localhost:3000/user/chat
+
+GET http://localhost:3000/chat/1000000000/messages
+POST http://localhost:3000/chat/message
+DELETE http://localhost:3000/chat/message
+
 */
