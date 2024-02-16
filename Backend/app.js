@@ -48,6 +48,24 @@ APP.get('/user/:id', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
+APP.get('/token/:token', async (req, res) => {
+    const TOKEN = req.params.token;
+    
+    // check if token exists
+    let result = await tokenExists(TOKEN);
+    if (!result) {
+        res.status(404).send("Token not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    const SQL = `SELECT * FROM users WHERE token = '${TOKEN}'`;
+    result = await sqlQuery(SQL);
+    res.send(result);
+
+    log(req, res, "SUCCESS");
+});
+
 APP.post('/user', async (req, res) => {
     const BODY = req.body;
     const USER = {prename: BODY.prename, name: BODY.name, birthdate: BODY.birthdate, username: BODY.username, email: BODY.email, password: BODY.password, aboID: BODY.aboID};
@@ -975,6 +993,13 @@ async function getUser(ID) {
 async function userCarExists(userID, carID) {
     // true if exists, false if not
     const SQL = `SELECT * FROM user_vehicle WHERE userID = ${userID} AND vehicleID = ${carID}`;
+    const RESULT = await sqlQuery(SQL);
+    return RESULT.length !== 0;
+}
+
+async function tokenExists(token) {
+    // true if exists, false if not
+    const SQL = `SELECT * FROM users WHERE token = '${token}'`;
     const RESULT = await sqlQuery(SQL);
     return RESULT.length !== 0;
 }

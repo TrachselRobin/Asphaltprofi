@@ -1,19 +1,64 @@
 document.addEventListener('DOMContentLoaded', function() {
     const SEARCH = document.getElementById('search');
     const LEADERBOARD = document.getElementById('leaderboard');
+    const CHAT = document.getElementById('chat');
     const PROFILE = document.getElementById('profile');
     const IFRAME = document.getElementById('iframe');
 
     SEARCH.addEventListener('click', function() {
         IFRAME.src = './search.html';
+        verify().then((result) => {
+            if (result) {
+                logedInElements.forEach((element) => {
+                    element.classList.remove('hidden');
+                });
+                notLogedInElements.forEach((element) => {
+                    element.classList.add('hidden');
+                });
+            }
+        });
     });
 
     LEADERBOARD.addEventListener('click', function() {
         IFRAME.src = './leaderboard.html';
+        verify().then((result) => {
+            if (result) {
+                logedInElements.forEach((element) => {
+                    element.classList.remove('hidden');
+                });
+                notLogedInElements.forEach((element) => {
+                    element.classList.add('hidden');
+                });
+            }
+        });
+    });
+
+    CHAT.addEventListener('click', function() {
+        IFRAME.src = './chat.html';
+        verify().then((result) => {
+            if (result) {
+                logedInElements.forEach((element) => {
+                    element.classList.remove('hidden');
+                });
+                notLogedInElements.forEach((element) => {
+                    element.classList.add('hidden');
+                });
+            }
+        });
     });
 
     PROFILE.addEventListener('click', function() {
         IFRAME.src = './profile.html';
+        verify().then((result) => {
+            if (result) {
+                logedInElements.forEach((element) => {
+                    element.classList.remove('hidden');
+                });
+                notLogedInElements.forEach((element) => {
+                    element.classList.add('hidden');
+                });
+            }
+        });
     });
     
     const logedInElements = document.querySelectorAll('.logedIn');

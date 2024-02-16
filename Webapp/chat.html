@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/chat.css">
+    <script src="./script/chat.js"></script>
+    <title>Chats</title>
+</head>
+<body>
+    <div>
+        <h1>Chats</h1>
+        <button onclick="addChat()">+</button>
+    </div>
+    <section>
+        <ul id="chatlist">
+            <li class="chat" onclick="openChat(chatID)">
+                <img src="./databaseImages/1.png" alt="profilepicture">
+                <div>
+                    <h2>Max Mustermann</h2>
+                    <p>Hi, wie gehts?</p>
+                </div>
+            </li>
+            <li class="chat" onclick="openChat(chatID)">
+                <img src="./databaseImages/1.png" alt="profilepicture">
+                <div>
+                    <h2>Max Mustermann</h2>
+                    <p>Hi, wie gehts?</p>
+                </div>
+            </li>
+            <li class="chat" onclick="openChat(chatID)">
+                <img src="./databaseImages/1.png" alt="profilepicture">
+                <div>
+                    <h2>Max Mustermann</h2>
+                    <p>Hi, wie gehts?</p>
+                </div>
+            </li>
+            <li class="chat" onclick="openChat(chatID)">
+                <img src="./databaseImages/1.png" alt="profilepicture">
+                <div>
+                    <h2>Max Mustermann</h2>
+                    <p>Hi, wie gehts?</p>
+                </div>
+            </li>
+            <li class="chat" onclick="openChat(chatID)">
+                <img src="./databaseImages/1.png" alt="profilepicture">
+                <div>
+                    <h2>Max Mustermann</h2>
+                    <p>Hi, wie gehts?</p>
+                </div>
+            </li>
+            <li class="chat" onclick="openChat(chatID)">
+                <img src="./databaseImages/1.png" alt="profilepicture">
+                <div>
+                    <h2>Max Mustermann</h2>
+                    <p>Hi, wie gehts?</p>
+                </div>
+            </li>
+            <li class="chat" onclick="openChat(chatID)">
+                <img src="./databaseImages/1.png" alt="profilepicture">
+                <div>
+                    <h2>Max Mustermann</h2>
+                    <p>Hi, wie gehts?</p>
+                </div>
+            </li>
+        </ul>
+        <ul id="chatMessages">
+            <li>
+                <ul id="messages">
+                    <li class="message friend">
+                        <p>Hi, wie gehts?</p>
+                    </li>
+                    <li class="message user">
+                        <p>Hi, wie gehts?</p>
+                    </li>
+                    <li class="message friend">
+                        <p>Hi, wie gehts?</p>
+                    </li>
+                    <li class="message user">
+                        <p>Hi, wie gehts?</p>
+                    </li>
+                    <li class="message friend">
+                        <p>Hi, wie gehts?</p>
+                    </li>
+                    <li class="message user">
+                        <p>Hi, wie gehts?</p>
+                    </li>
+                    <li class="message friend">
+                        <p>Hi, wie gehts?</p>
+                    </li>
+                    <li class="message user">
+                        <p>Hi, wie gehts?</p>
+                    </li>
+                    <li class="message friend">
+                        <p>Hi, wie gehts?</p>
+                    </li>
+                    <li class="message user">
+                        <p>Hi, wie gehts?</p>
+                    </li>
+                    <li class="message friend">
+                        <p>Hi, wie gehts?</p>
+                    </li>
+                    <li class="message user">
+                        <p>Hi, wie gehts?</p>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <input type="text" id="message" placeholder="Nachricht">
+                <button onclick="scrollToBottom()" id="send">Senden</button>
+            </li>
+        </ul>
+    </section>
+    <img id="loader" class="hidden" src="./images/loader.gif" alt="loader">
+</body>
+</html>
