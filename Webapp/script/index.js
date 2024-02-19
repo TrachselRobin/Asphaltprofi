@@ -21,16 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     LEADERBOARD.addEventListener('click', function() {
         IFRAME.src = './leaderboard.html';
-        verify().then((result) => {
-            if (result) {
-                logedInElements.forEach((element) => {
-                    element.classList.remove('hidden');
-                });
-                notLogedInElements.forEach((element) => {
-                    element.classList.add('hidden');
-                });
-            }
-        });
     });
 
     CHAT.addEventListener('click', function() {

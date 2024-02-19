@@ -144,8 +144,8 @@ INSERT INTO `tag` (name) VALUES ('Racing only');
 INSERT INTO `address` (street, number, zip, city) VALUES ('Musterstrasse', 1, 8000, 'Zürich');
 INSERT INTO `address` (street, number, zip, city) VALUES ('Maxistrasse', 2, 8001, 'Zürich');
 
-INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('BMW', 'M3', './images/bmw.png', 2019, 431, 2979, 1);
-INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('Audi', 'RS6', './images/audi.png' , 2020, 600, 3993, 2);
+INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('BMW', 'M3', './images/2.png', 2019, 431, 2979, 1);
+INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('Audi', 'RS6', './images/1.png' , 2020, 600, 3993, 2);
 
 INSERT INTO `users` (prename, name, birthdate, username, email, password, aboID, addressID) VALUES ('Max', 'Mustermann', '1990-01-01', 'maxi', 'max@muster.ch', '1234', 1, 1);
 INSERT INTO `users` (prename, name, birthdate, username, email, password, aboID, addressID) VALUES ('Hans', 'Muster', '1991-01-01', 'hansi', 'hans@muster.ch', '1234', 2, 2);

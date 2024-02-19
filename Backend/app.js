@@ -737,7 +737,7 @@ APP.get('/user/:id/chats', async (req, res) => {
     }
 
     // sql that gets all chats where USERID is equal to userID or user2ID
-    const SQL = `SELECT * FROM chat WHERE ID IN (SELECT chatID FROM user_chat WHERE userID = ${USERID})`;
+    const SQL = `SELECT * FROM chat WHERE userID = ${USERID} OR user2ID = ${USERID}`;
     result = await sqlQuery(SQL);
     res.send(result);
 
@@ -843,6 +843,15 @@ APP.post('/chat/message', async (req, res) => {
     result = await userIdExists(MESSAGE.userID);
     if (!result) {
         res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // check if user is in chat
+    sql = `SELECT * FROM user_chat WHERE userID = ${MESSAGE.userID} AND chatID = ${CHATID}`;
+    result = await sqlQuery(sql);
+    if (result.length === 0) {
+        res.status(404).send("User not in chat");
         log(req, res, "ERROR");
         return;
     }
