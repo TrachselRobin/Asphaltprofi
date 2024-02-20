@@ -22,6 +22,7 @@ CREATE TABLE users (
     `username` VARCHAR(20) NOT NULL,
     `email` VARCHAR(100) NOT NULL,
     `password` VARCHAR(20) NOT NULL,
+    `image` VARCHAR(100) NOT NULL,
     `token` VARCHAR(24),
     `tokenCreation` DATETIME,
     `aboID` INTEGER NOT NULL,
@@ -147,8 +148,8 @@ INSERT INTO `address` (street, number, zip, city) VALUES ('Maxistrasse', 2, 8001
 INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('BMW', 'M3', './images/2.png', 2019, 431, 2979, 1);
 INSERT INTO `vehicle` (brand, model, image, year, hp, ccm, tagID) VALUES ('Audi', 'RS6', './images/1.png' , 2020, 600, 3993, 2);
 
-INSERT INTO `users` (prename, name, birthdate, username, email, password, aboID, addressID) VALUES ('Max', 'Mustermann', '1990-01-01', 'maxi', 'max@muster.ch', '1234', 1, 1);
-INSERT INTO `users` (prename, name, birthdate, username, email, password, aboID, addressID) VALUES ('Hans', 'Muster', '1991-01-01', 'hansi', 'hans@muster.ch', '1234', 2, 2);
+INSERT INTO `users` (prename, name, birthdate, username, email, password, aboID, addressID, image) VALUES ('Max', 'Mustermann', '1990-01-01', 'maxi', 'max@muster.ch', '1234', 1, 1, '1.png');
+INSERT INTO `users` (prename, name, birthdate, username, email, password, aboID, addressID, image) VALUES ('Hans', 'Muster', '1991-01-01', 'hansi', 'hans@muster.ch', '1234', 2, 2, '2.png');
 
 INSERT INTO `user_vehicle` (userID, vehicleID) VALUES (1000000000, 1);
 INSERT INTO `user_vehicle` (userID, vehicleID) VALUES (1000000001, 2);
