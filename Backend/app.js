@@ -179,6 +179,38 @@ APP.delete('/user', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
+APP.get('/check/email/:email', async (req, res) => {
+    const EMAIL = req.params.email;
+
+    // check if user email exists
+    let result = await userEmailExists(EMAIL);
+    if (result) {
+        res.status(409).send("Email already exists");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    res.send("Email available");
+
+    log(req, res, "SUCCESS");
+});
+
+APP.get('/check/username/:username', async (req, res) => {
+    const USERNAME = req.params.username;
+
+    // check if user username exists
+    let result = await userUsernameExists(USERNAME);
+    if (result) {
+        res.status(409).send("Username already exists");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    res.send("Username available");
+
+    log(req, res, "SUCCESS");
+});
+
 APP.post('/user/car', async (req, res) => {
     const USERID = req.body.userID;
     const BODY = req.body;

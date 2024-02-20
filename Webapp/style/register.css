@@ -1,0 +1,66 @@
+:root {
+    --background: #11001C;
+    --gray: #3C3C3C;
+    --primary: #290025;
+    --secondary: #35012C;
+    --tertiary: #4F0147;
+    --quaternary: #3A015C;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+dialog {
+    background-color: whitesmoke;
+    z-index: 3;
+    padding: 5rem;
+    border: none;
+    border-radius: 1rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+}
+
+svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: blur(100px) brightness(20);
+}
+
+#error {
+    display: none;
+    color: red;
+    margin-top: 1rem;
+}
+
+#back {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    color: var(--primary);
+    cursor: pointer;
+    background-color: white;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    z-index: 1;
+}
+
+.disabled {
+    background-color: var(--gray);
+    color: white;
+    cursor: not-allowed;
+}

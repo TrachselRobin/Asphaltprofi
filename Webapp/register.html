@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/register.css">
+    <script src="./script/register.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <a href="./index.html" id="back">< Startseite</a>
+    
+    <dialog id="firstRegisterModal">
+        <div class="steps">
+            <span class="editing"></span>
+            <span></span>
+            <span></span>
+        </div>
+        <form action="">
+            <label for="email">E-Mail</label>
+            <input type="email" id="email" required>
+            <label for="password">Passwort</label>
+            <input type="password" id="password" required>
+            <label for="passwordRepeat">Passwort bestätigen</label>
+            <input type="password" id="passwordRepeat" required>
+            <p id="error">Error</p>
+        </form>
+        <div>
+            <button class="cancleModal" type="cancle">Abbrechen</button>
+            <button id="submitModal1" type="submit">Weiter</button>
+        </div>
+    </dialog>
+    <dialog id="secondRegisterModal">
+        <div class="steps">
+            <span class="done"></span>
+            <span class="editing"></span>
+            <span></span>
+        </div>
+        <form action="">
+            <label for="firstname">Vorname</label>
+            <input type="text" id="firstname" required>
+            <label for="lastname">Nachname</label>
+            <input type="text" id="lastname" required>
+            <label for="birthdate">Geburtsdatum</label>
+            <input type="date" id="birthdate" required>
+            <p id="error">Error</p>
+            <div>
+                <button class="cancleModal" type="cancle">Abbrechen</button>
+                <button id="submitModal2" type="submit">Weiter</button>
+            </div>
+        </form>
+    </dialog>
+    <dialog id="thirdRegisterModal">
+        <div class="steps">
+            <span class="done"></span>
+            <span class="done"></span>
+            <span class="editing"></span>
+        </div>
+        <form action="">
+            <label for="username">Benutzername</label>
+            <input type="text" id="username" required>
+            <label for="profilePicture">Profilbild</label>
+            <input type="file" id="profilePicture" required>
+            <p id="error">Error</p>
+            <div>
+                <button class="cancleModal" type="cancle">Abbrechen</button>
+                <button id="register" type="submit">Registrieren</button>
+            </div>
+        </form>
+    </dialog>
+
+    <svg height="100" width="100">
+        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="white" />
+    </svg>
+    <svg height="100" width="100">
+        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="white" />
+    </svg>
+    <svg height="100" width="100">
+        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="white" />
+    </svg>
+    <svg height="100" width="100">
+        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="white" />
+    </svg>
+    <svg height="100" width="100">
+        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="#35012C" />
+    </svg>
+    <svg height="100" width="100">
+        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="#35012C" />
+    </svg>
+    <svg height="100" width="100">
+        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="#35012C" />
+    </svg>
+    <svg height="100" width="100">
+        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="#4F0147" />
+    </svg>
+    <svg height="100" width="100">
+        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="#4F0147" />
+    </svg>
+    <svg height="100" width="100">
+        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="#4F0147" />
+    </svg>
+</body>
+</html>

@@ -140,3 +140,52 @@ body > div > button {
     background-color: #bebebe;
     cursor: pointer;
 }
+
+#addChatDialog {
+    gap: 0.5rem;
+    padding: 1rem;
+    list-style: none;
+    width: 50%;
+    background-color: #f5f5f5;
+    border: none;
+}
+
+#addChatDialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#addChatForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    list-style: none;
+    width: auto;
+    background-color: #f5f5f5;
+}
+
+#addChatForm select {
+    padding: 0.5rem;
+    border-radius: 10px;
+    border:none;
+    margin: 0.3rem;
+    width: 100%;
+}
+
+#addChatForm div {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    list-style: none;
+    width: auto;
+    background-color: #f5f5f5;
+}
+
+#addChatForm button {
+    padding: 0.5rem;
+    border-radius: 50px;
+    border:none;
+    background-color: #bebebe;
+    cursor: pointer;
+}

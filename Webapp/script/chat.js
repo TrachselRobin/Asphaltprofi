@@ -108,3 +108,15 @@ function showChats() {
         chatListElement.appendChild(chatElement);
     });
 }
+
+function addChat() {
+    const CHATDIALOG = document.getElementById("addChatDialog");
+    const CHATDIALOGCANCEL = document.getElementById("cancleDialog");
+    const CHATDIALOGSUBMIT = document.getElementById("submitModal");
+
+    CHATDIALOG.showModal();
+
+    CHATDIALOGCANCEL.addEventListener('click', function() {
+        CHATDIALOG.close();
+    });
+}
