@@ -68,7 +68,7 @@ APP.get('/token/:token', async (req, res) => {
 
 APP.post('/user', async (req, res) => {
     const BODY = req.body;
-    const USER = {prename: BODY.prename, name: BODY.name, birthdate: BODY.birthdate, username: BODY.username, email: BODY.email, password: BODY.password, aboID: BODY.aboID};
+    const USER = {prename: BODY.prename, name: BODY.name, birthdate: BODY.birthdate, username: BODY.username, email: BODY.email, password: BODY.password, image: BODY.image ,aboID: 1};
     const ADDRESS = {street: BODY.street, city: BODY.city, zip: BODY.zip, number: BODY.number};
     
     // check if user email exists
@@ -92,7 +92,7 @@ APP.post('/user', async (req, res) => {
         result = await sqlQuery(sql);
     }
     
-    sql = `INSERT INTO users (prename, name, birthdate, username, email, password, aboID, addressID) VALUES ('${USER.prename}', '${USER.name}', '${USER.birthdate}', '${USER.username}', '${USER.email}', '${USER.password}', ${USER.aboID}, (SELECT ID FROM address WHERE street = '${ADDRESS.street}' AND number = ${ADDRESS.number} AND zip = ${ADDRESS.zip} AND city = '${ADDRESS.city}'))`;
+    sql = `INSERT INTO users (prename, name, birthdate, username, email, password, aboID, addressID, image) VALUES ('${USER.prename}', '${USER.name}', '${USER.birthdate}', '${USER.username}', '${USER.email}', '${USER.password}', ${USER.aboID}, (SELECT ID FROM address WHERE street = '${ADDRESS.street}' AND number = ${ADDRESS.number} AND zip = ${ADDRESS.zip} AND city = '${ADDRESS.city}'), '${USER.image}')`;
     result = await sqlQuery(sql);
 
     res.send("User added");
@@ -103,7 +103,7 @@ APP.post('/user', async (req, res) => {
 APP.put('/user', async (req, res) => {
     const BODY = req.body;
     const USEROLD = await getUser(BODY.userID);
-    const USER = {prename: BODY.prename, name: BODY.name, birthdate: BODY.birthdate, username: BODY.username, email: BODY.email, password: BODY.password};
+    const USER = {prename: BODY.prename, name: BODY.name, birthdate: BODY.birthdate, username: BODY.username, email: BODY.email, password: BODY.password, image: BODY.image};
     const ADDRESS = {street: BODY.street, city: BODY.city, zip: BODY.zip, number: BODY.number, addressID: undefined};
     
     // check if user id exists
@@ -702,7 +702,7 @@ APP.post('/user/chat', async (req, res) => {
     }
 
     // check if chat already exists
-    let sql = `SELECT * FROM chat WHERE userID = ${USERID} OR userID = ${CHAT.friendID}`;
+    let sql = `SELECT * FROM chat WHERE userID = ${USERID} AND user2ID = ${CHAT.friendID} OR userID = ${CHAT.friendID} AND user2ID = ${USERID}`;
     result = await sqlQuery(sql);
     if (result.length !== 0) {
         res.status(409).send("Chat already exists");
@@ -737,8 +737,16 @@ APP.get('/user/:id/chats', async (req, res) => {
     }
 
     // sql that gets all chats where USERID is equal to userID or user2ID
-    const SQL = `SELECT * FROM chat WHERE userID = ${USERID} OR user2ID = ${USERID}`;
-    result = await sqlQuery(SQL);
+    let sql = `SELECT * FROM chat WHERE userID = ${USERID} OR user2ID = ${USERID}`;
+    result = await sqlQuery(sql);
+
+    for (let i = 0; i < result.length; i++) {
+        sql = `SELECT * FROM message WHERE ID IN (SELECT messageID FROM chat_message WHERE chatID = ${result[i].ID} ORDER BY time) ORDER BY time DESC LIMIT 1`;
+        result[i].lastMessage = await sqlQuery(sql);
+        result[i].lastMessage = result[i].lastMessage[0];
+    }
+
+    
     res.send(result);
 
     log(req, res, "SUCCESS");
