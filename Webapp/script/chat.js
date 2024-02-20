@@ -2,8 +2,6 @@ let currentChat;
 let chatList;
 let user;
 
-onStart();
-
 async function onStart() {
     currentChat = null;
     chatList = [];
@@ -13,7 +11,9 @@ async function onStart() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    
+    const LOADER = document.getElementById('loader');
+    LOADER.classList.remove('hidden');
+    onStart();
 });
 
 async function getUser() {
@@ -36,6 +36,9 @@ async function loadChats() {
     chatList.push(...data);
     console.log(chatList);
     showChats();
+    
+    const LOADER = document.getElementById('loader');
+    LOADER.classList.add('hidden');
 }
 
 async function openChat(chatID) {
@@ -82,13 +85,22 @@ function showChats() {
         chatElement.classList.add('chat');
         chatElement.onclick = () => openChat(chat.ID);
         const img = document.createElement('img');
-        img.src = `./databaseImages/${chat.ID}`;
+        img.src = `./databaseImages/${chat.ID}.png`;
         img.alt = 'profilepicture';
         const div = document.createElement('div');
         const h2 = document.createElement('h2');
-        h2.innerText = chat.Name;
+        h2.innerText = chat.name;
         const p = document.createElement('p');
-        p.innerText = chat.LastMessage;
+        // chat.lastMessage.text might be undefined. Check if it exists before accessing it.
+        if (chat.lastMessage && chat.lastMessage.text) {
+            if (chat.lastMessage.text.length > 22) {
+                p.innerText = chat.lastMessage.text.substring(0, 21) + '...';
+            } else {
+                p.innerText = chat.lastMessage.text;
+            }
+        } else {
+            p.innerText = '';
+        }
         div.appendChild(h2);
         div.appendChild(p);
         chatElement.appendChild(img);
