@@ -17,13 +17,9 @@ body {
     width: 100vw;
     overflow: hidden;
 }
-
-dialog {
-    background-color: whitesmoke;
-    z-index: 3;
-    padding: 5rem;
-    border: none;
-    border-radius: 1rem;
+body > div {
+    width: 40%;
+    margin: 0;
 }
 
 form {
@@ -31,6 +27,22 @@ form {
     flex-direction: column;
     align-items: center;
     z-index: 2;
+    background-color: whitesmoke;
+    padding: 5rem;
+    border-radius: 1rem;
+    width: 40%;
+}
+
+#firstForm {
+    display: flex;
+}
+
+#secondForm {
+    display: none;
+}
+
+#thirdForm {
+    display: none;
 }
 
 svg {
@@ -40,7 +52,7 @@ svg {
     filter: blur(100px) brightness(20);
 }
 
-#error {
+.error {
     display: none;
     color: red;
     margin-top: 1rem;
@@ -63,4 +75,24 @@ svg {
     background-color: var(--gray);
     color: white;
     cursor: not-allowed;
+}
+
+.steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 3rem;
+}
+
+.steps span {
+    margin: 0.1rem;
+    height: 10px;
+    width: 40%;
+    border-radius: 0.5rem;
+    border: 1px solid #3c3c3c7f;
+}
+
+.done {
+    background-color: #007808;
 }

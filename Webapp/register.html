@@ -9,66 +9,65 @@
 </head>
 <body>
     <a href="./index.html" id="back">< Startseite</a>
-    
-    <dialog id="firstRegisterModal">
-        <div class="steps">
-            <span class="editing"></span>
-            <span></span>
-            <span></span>
-        </div>
-        <form action="">
+
+    <div id="firstRegister">
+        <form action="" id="firstForm">
+            <div class="steps">
+                <span class="editing"></span>
+                <span></span>
+                <span></span>
+            </div>
             <label for="email">E-Mail</label>
             <input type="email" id="email" required>
             <label for="password">Passwort</label>
             <input type="password" id="password" required>
-            <label for="passwordRepeat">Passwort bestätigen</label>
-            <input type="password" id="passwordRepeat" required>
-            <p id="error">Error</p>
+            <label for="confirmPassword">Passwort bestätigen</label>
+            <input type="password" id="confirmPassword" required>
+            <p class="error">Error</p>
+            <div>
+                <button class="cancleModal" type="cancle">Abbrechen</button>
+                <button id="submitForm1" type="submit">Weiter</button>
+            </div>
         </form>
-        <div>
-            <button class="cancleModal" type="cancle">Abbrechen</button>
-            <button id="submitModal1" type="submit">Weiter</button>
-        </div>
-    </dialog>
-    <dialog id="secondRegisterModal">
-        <div class="steps">
-            <span class="done"></span>
-            <span class="editing"></span>
-            <span></span>
-        </div>
-        <form action="">
+    </div>
+    <div id="secondRegister">
+        <form action="" id="secondForm">
+            <div class="steps">
+                <span class="done"></span>
+                <span class="editing"></span>
+                <span></span>
+            </div>
             <label for="firstname">Vorname</label>
             <input type="text" id="firstname" required>
             <label for="lastname">Nachname</label>
             <input type="text" id="lastname" required>
             <label for="birthdate">Geburtsdatum</label>
             <input type="date" id="birthdate" required>
-            <p id="error">Error</p>
+            <p class="error">Error</p>
             <div>
                 <button class="cancleModal" type="cancle">Abbrechen</button>
-                <button id="submitModal2" type="submit">Weiter</button>
+                <button id="submitForm2" type="submit">Weiter</button>
             </div>
         </form>
-    </dialog>
-    <dialog id="thirdRegisterModal">
-        <div class="steps">
-            <span class="done"></span>
-            <span class="done"></span>
-            <span class="editing"></span>
-        </div>
-        <form action="">
+    </div>
+    <div id="thirdRegister">
+        <form action="" id="thirdForm">
+            <div class="steps">
+                <span class="done"></span>
+                <span class="done"></span>
+                <span class="editing"></span>
+            </div>
             <label for="username">Benutzername</label>
             <input type="text" id="username" required>
             <label for="profilePicture">Profilbild</label>
             <input type="file" id="profilePicture" required>
-            <p id="error">Error</p>
+            <p class="error">Error</p>
             <div>
                 <button class="cancleModal" type="cancle">Abbrechen</button>
-                <button id="register" type="submit">Registrieren</button>
+                <button id="submitForm3" type="submit">Registrieren</button>
             </div>
         </form>
-    </dialog>
-
+    </div>
     <svg height="100" width="100">
         <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="white" />
     </svg>

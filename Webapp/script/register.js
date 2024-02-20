@@ -27,12 +27,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, 1000 / 60);
     
-    const firstRegisterModal = document.getElementById('firstRegisterModal');
-    const submitModal1 = document.getElementById('submitModal1');
-    const secondRegisterModal = document.getElementById('secondRegisterModal');
-    const submitModal2 = document.getElementById('submitModal2');
-    const thirdRegisterModal = document.getElementById('thirdRegisterModal');
-    const submitModal3 = document.getElementById('register');
+    const firstForm = document.getElementById('firstForm');
+    const secondForm = document.getElementById('secondForm');
+    const thirdForm = document.getElementById('thirdForm');
+
+    const error = document.getElementsByClassName('error');
 
     const cancleButtons = document.getElementsByClassName('cancleModal');
 
@@ -42,21 +41,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    firstRegisterModal.showModal();
+    firstForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        let user = {
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            confirmPassword: document.getElementById('confirmPassword').value,
+        };
 
-    submitModal1.addEventListener('click', function() {
-        submitModal1.disabled = true;
-        submitModal1.classList.add('disabled');
-        firstRegisterModal.close();
-        secondRegisterModal.showModal();
+        if (user.password !== user.confirmPassword) {
+            error[0].style.display = 'block';
+            error[0].innerText = 'Passwörter stimmen nicht überein!';
+            return;
+        }
+        firstForm.style.display = 'none';
+        secondForm.style.display = 'flex';
     });
 
-    submitModal2.addEventListener('click', function() {
-        secondRegisterModal.close();
-        thirdRegisterModal.showModal();
+    secondForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        secondForm.style.display = 'none';
+        thirdForm.style.display = 'flex';
     });
 
-    submitModal3.addEventListener('click', function() {
-        thirdRegisterModal.close();
+    thirdForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        window.location.href = './index.html';
     });
 });
