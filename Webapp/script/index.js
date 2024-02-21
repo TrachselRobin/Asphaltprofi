@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 async function verify() {
-    const response = await fetch(`http://localhost:3000/verify/${localStorage.getItem('token')}`);
+    const response = await fetch(`http://localhost:3000/verify/${sessionStorage.getItem('token')}`);
     if (response.status === 200) {
         return true;
     } else {
@@ -88,10 +88,10 @@ async function logout() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ token: localStorage.getItem('token') })
+        body: JSON.stringify({ token: sessionStorage.getItem('token') })
     });
     if (response.status === 200) {
-        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
         window.location.reload();
     }
 }

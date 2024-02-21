@@ -96,7 +96,7 @@ async function login() {
 
     if (status === 200) {
         // data is a token. Create a token with this string and store it in the local storage
-        localStorage.setItem('token', data);
+        sessionStorage.setItem('token', data);
         window.location.href = './index.html';
     } else if (status === 401 || status === 404) {
         const ERROR = document.getElementById('error');

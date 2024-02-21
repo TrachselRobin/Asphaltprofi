@@ -1,3 +1,18 @@
+verify().then((result) => {
+    if (result) {
+        window.location.href = './index.html';
+    }
+});
+
+async function verify() {
+    const response = await fetch(`http://localhost:3000/verify/${sessionStorage.getItem('token')}`);
+    if (response.status === 200) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const svgElements = document.querySelectorAll('svg');
     let svgElementsData = [];
@@ -31,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const firstFormEmail = document.getElementById('email');
     const firstFormPassword = document.getElementById('password');
     const firstFormConfirmPassword = document.getElementById('confirmPassword');
+    const firstFormSubmit = document.getElementById('submitForm1');
     const secondForm = document.getElementById('secondForm');
     const thirdForm = document.getElementById('thirdForm');
     const fourthForm = document.getElementById('fourthForm');
@@ -77,10 +93,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (response.status !== 200) {
             error[0].style.display = 'block';
             error[0].innerText = 'Email bereits vergeben!';
+            firstFormSubmit.disabled = true;
+            firstFormSubmit.style.backgroundColor = 'grey';
+            firstFormSubmit.style.cursor = 'not-allowed';
             email.style.border = '1px solid red';
         } else {
             error[0].style.display = 'none';
             error[0].innerText = '';
+            firstFormSubmit.disabled = false;
+            firstFormSubmit.style.backgroundColor = '#007808';
+            firstFormSubmit.style.cursor = 'pointer';
             email.style.border = 'none';
         }
     });
@@ -123,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         USER = {
             ...USER,
-            firstName: firstName.value,
+            prename: firstName.value,
             name: name.value,
             birthdate: birthdate.value
         };
@@ -187,39 +209,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log(USER);
 
-        fetch('http://localhost:3000/upload', {
+        await fetch('http://localhost:3000/upload', {
             method: 'POST',
+            header: {
+                'content-type': 'application/json',
+            },
             body: formData,
         });
 
-        fetch('http://localhost:3000/user', {
+        await fetch('http://localhost:3000/user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(USER),
-        }).then((response) => {
-            if (response.status === 200) {
-                login(USER.email, USER.password);
-            }
         });
+
+        window.location.href = './index.html';
     });
 });
-
-async function login(email, password) {
-    const response = await fetch('http://localhost:3000/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email: email, password: password }),
-    });
-    
-    const data = await response.text();
-    const status = response.status;
-
-    if (status === 200) {
-        localStorage.setItem('token', data);
-        window.location.href = './index.html';
-    }
-}

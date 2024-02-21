@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function getUser() {
     // fetch user: http://localhost:3000/verify/${localStorage.getItem('token')
-    const response = await fetch(`http://localhost:3000/token/${localStorage.getItem('token')}`);
+    const response = await fetch(`http://localhost:3000/token/${sessionStorage.getItem('token')}`);
     const data = await response.json();
     return data;
 }

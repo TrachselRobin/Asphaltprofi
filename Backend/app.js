@@ -82,7 +82,6 @@ APP.get('/token/:token', async (req, res) => {
 });
 
 APP.post('/user', async (req, res) => {
-    console.log("test");
     const BODY = req.body;
     const USER = {prename: BODY.prename, name: BODY.name, birthdate: BODY.birthdate, username: BODY.username, email: BODY.email, password: BODY.password, imageURL: BODY.image ,aboID: 1};
     const ADDRESS = {street: BODY.street, city: BODY.city, zip: BODY.zip, number: BODY.number};
@@ -111,7 +110,13 @@ APP.post('/user', async (req, res) => {
     sql = `INSERT INTO users (prename, name, birthdate, username, email, password, aboID, addressID, image) VALUES ('${USER.prename}', '${USER.name}', '${USER.birthdate}', '${USER.username}', '${USER.email}', '${USER.password}', ${USER.aboID}, (SELECT ID FROM address WHERE street = '${ADDRESS.street}' AND number = ${ADDRESS.number} AND zip = ${ADDRESS.zip} AND city = '${ADDRESS.city}'), '${USER.imageURL}')`;
     result = await sqlQuery(sql);
 
-    res.send("User added");
+    const TOKEN = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    // update token and tokenCreation to current time
+    sql = `UPDATE users SET token = '${TOKEN}', tokenCreation = NOW() WHERE email = '${USER.email}' AND password = '${USER.password}'`;
+    result = await sqlQuery(sql);
+
+    // send token as json
+    res.send(TOKEN);
     
     log(req, res, "SUCCESS");
 });
