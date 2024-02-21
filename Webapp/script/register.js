@@ -1,18 +1,3 @@
-verify().then((result) => {
-    if (result) {
-        window.location.href = './index.html';
-    }
-});
-
-async function verify() {
-    const response = await fetch(`http://localhost:3000/verify/${sessionStorage.getItem('token')}`);
-    if (response.status === 200) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     const svgElements = document.querySelectorAll('svg');
     let svgElementsData = [];
@@ -187,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    fourthForm.addEventListener('submit', async function(event) {
+    fourthForm.addEventListener('submit', function(event) {
         event.preventDefault();
         
         const username = document.getElementById('username');
@@ -209,22 +194,38 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log(USER);
 
-        await fetch('http://localhost:3000/upload', {
-            method: 'POST',
-            header: {
-                'content-type': 'application/json',
-            },
-            body: formData,
-        });
-
-        await fetch('http://localhost:3000/user', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(USER),
-        });
-
-        window.location.href = './index.html';
+        createUser(USER, formData);
     });
 });
+
+async function createUser(USER, formData) {
+    await registerUser(USER);
+    upload(formData);
+}
+
+async function upload(formData) {
+    console.log("upload");
+    let response = await fetch('http://localhost:3000/upload', {
+        method: 'POST',
+        header: {
+            'content-type': 'application/json',
+        },
+        body: formData,
+    })
+
+    window.location.href = './index.html';
+}
+
+async function registerUser(USER) {
+    console.log("register");
+    let response = await fetch('http://localhost:3000/user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(USER),
+    });
+
+    let data = await response.text();
+    sessionStorage.setItem('token', data);
+}
