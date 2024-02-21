@@ -17,8 +17,8 @@ body {
     width: 100vw;
     overflow: hidden;
 }
+
 body > div {
-    width: 40%;
     margin: 0;
 }
 
@@ -26,11 +26,19 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 2;
+    z-index: 4;
     background-color: whitesmoke;
     padding: 5rem;
     border-radius: 1rem;
-    width: 40%;
+    width: 40vw;
+}
+
+form > input {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    width: calc(100% - 1rem);
 }
 
 #firstForm {
@@ -45,10 +53,64 @@ form {
     display: none;
 }
 
+#thirdForm > section {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+    width: 100%;
+    gap: 10%;
+}
+
+#thirdForm > section > input {
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+#fourthForm {
+    display: none;
+}
+
+form > div {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+    width: 100%;
+    gap: 10%;
+}
+
+form > div > button {
+    width: 100%;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.cancleModal {
+    background-color: #3c3c3c;
+    color: white;
+}
+
+#submitForm1,
+#submitForm2,
+#submitForm3,
+#submitForm4 {
+    background-color: #007808;
+    color: white;
+}
+
+button:hover {
+    filter: brightness(0.8);
+}
+
 svg {
     position: absolute;
     top: 0;
     left: 0;
+    z-index: -10;
     filter: blur(100px) brightness(20);
 }
 
@@ -56,6 +118,7 @@ svg {
     display: none;
     color: red;
     margin-top: 1rem;
+    width: auto;
 }
 
 #back {
@@ -68,7 +131,7 @@ svg {
     padding: 0.5rem;
     border-radius: 0.5rem;
     text-decoration: none;
-    z-index: 1;
+    z-index: 4;
 }
 
 .disabled {

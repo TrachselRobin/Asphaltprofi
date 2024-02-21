@@ -16,16 +16,18 @@
                 <span class="editing"></span>
                 <span></span>
                 <span></span>
+                <span></span>
             </div>
             <label for="email">E-Mail</label>
-            <input type="email" id="email" required>
+            <input type="email" id="email" required autocomplete="username">
             <label for="password">Passwort</label>
-            <input type="password" id="password" required>
+            <!-- Password has to be at least 8 characters -->
+            <input type="password" id="password" required minlength="8" autocomplete="new-password">
             <label for="confirmPassword">Passwort bestätigen</label>
-            <input type="password" id="confirmPassword" required>
+            <input type="password" id="confirmPassword" required minlength="8" autocomplete="new-password">
             <p class="error">Error</p>
             <div>
-                <button class="cancleModal" type="cancle">Abbrechen</button>
+                <button class="cancleModal" type="button">Abbrechen</button>
                 <button id="submitForm1" type="submit">Weiter</button>
             </div>
         </form>
@@ -36,6 +38,7 @@
                 <span class="done"></span>
                 <span class="editing"></span>
                 <span></span>
+                <span></span>
             </div>
             <label for="firstname">Vorname</label>
             <input type="text" id="firstname" required>
@@ -45,7 +48,7 @@
             <input type="date" id="birthdate" required>
             <p class="error">Error</p>
             <div>
-                <button class="cancleModal" type="cancle">Abbrechen</button>
+                <button class="cancleModal" type="button">Abbrechen</button>
                 <button id="submitForm2" type="submit">Weiter</button>
             </div>
         </form>
@@ -56,6 +59,32 @@
                 <span class="done"></span>
                 <span class="done"></span>
                 <span class="editing"></span>
+                <span></span>
+            </div>
+            <label for="street">Strasse</label>
+            <section>
+                <input type="text" id="street" required placeholder="Musterstrasse">
+                <input type="text" id="housenumber" placeholder="12" required>
+            </section>
+            <label for="postcode">Postleitzahl</label>
+            <input type="text" id="postcode" required>
+            <label for="city">Stadt</label>
+            <input type="text" id="city" required>
+
+            <p class="error">Error</p>
+            <div>
+                <button class="cancleModal" type="button">Abbrechen</button>
+                <button id="submitForm3" type="submit">Weiter</button>
+            </div>
+        </form>
+    </div>
+    <div id="fourthRegister">
+        <form action="" id="fourthForm">
+            <div class="steps">
+                <span class="done"></span>
+                <span class="done"></span>
+                <span class="done"></span>
+                <span class="editing"></span>
             </div>
             <label for="username">Benutzername</label>
             <input type="text" id="username" required>
@@ -63,11 +92,12 @@
             <input type="file" id="profilePicture" required>
             <p class="error">Error</p>
             <div>
-                <button class="cancleModal" type="cancle">Abbrechen</button>
-                <button id="submitForm3" type="submit">Registrieren</button>
+                <button class="cancleModal" type="button">Abbrechen</button>
+                <button id="submitForm4" type="submit">Registrieren</button>
             </div>
         </form>
     </div>
+
     <svg height="100" width="100">
         <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="white" />
     </svg>

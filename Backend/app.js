@@ -6,6 +6,21 @@ const PORT = process.env.PORT || 3000;
 
 const credentials = require('./credentials.json');
 
+const multer = require('multer');
+
+// Spezifizieren Sie den Speicherort und den Dateinamen für die hochgeladenen Dateien
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './databaseImages'); // Verzeichnis für hochgeladene Bilder
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '_' + file.originalname); // Benennen Sie die hochgeladene Datei um
+    }
+});
+
+// Konfigurieren Sie Multer mit dem Speicherort und den Dateinamen
+const upload = multer({ storage: storage });
+
 APP.use(express.json());
 
 APP.use((req, res, next) => {
@@ -67,8 +82,9 @@ APP.get('/token/:token', async (req, res) => {
 });
 
 APP.post('/user', async (req, res) => {
+    console.log("test");
     const BODY = req.body;
-    const USER = {prename: BODY.prename, name: BODY.name, birthdate: BODY.birthdate, username: BODY.username, email: BODY.email, password: BODY.password, image: BODY.image ,aboID: 1};
+    const USER = {prename: BODY.prename, name: BODY.name, birthdate: BODY.birthdate, username: BODY.username, email: BODY.email, password: BODY.password, imageURL: BODY.image ,aboID: 1};
     const ADDRESS = {street: BODY.street, city: BODY.city, zip: BODY.zip, number: BODY.number};
     
     // check if user email exists
@@ -92,7 +108,7 @@ APP.post('/user', async (req, res) => {
         result = await sqlQuery(sql);
     }
     
-    sql = `INSERT INTO users (prename, name, birthdate, username, email, password, aboID, addressID, image) VALUES ('${USER.prename}', '${USER.name}', '${USER.birthdate}', '${USER.username}', '${USER.email}', '${USER.password}', ${USER.aboID}, (SELECT ID FROM address WHERE street = '${ADDRESS.street}' AND number = ${ADDRESS.number} AND zip = ${ADDRESS.zip} AND city = '${ADDRESS.city}'), '${USER.image}')`;
+    sql = `INSERT INTO users (prename, name, birthdate, username, email, password, aboID, addressID, image) VALUES ('${USER.prename}', '${USER.name}', '${USER.birthdate}', '${USER.username}', '${USER.email}', '${USER.password}', ${USER.aboID}, (SELECT ID FROM address WHERE street = '${ADDRESS.street}' AND number = ${ADDRESS.number} AND zip = ${ADDRESS.zip} AND city = '${ADDRESS.city}'), '${USER.imageURL}')`;
     result = await sqlQuery(sql);
 
     res.send("User added");
@@ -940,6 +956,20 @@ APP.delete('/chat/message', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
+APP.post('/upload', upload.single('image'), (req, res) => {
+    if (!req.file) {
+        res.status(400).send('No files were uploaded.');
+        log(req, res, "ERROR");
+        return;
+    }
+
+    // Der Dateiname der hochgeladenen Datei wird in req.file.filename gespeichert
+
+    res.send('File uploaded successfully!');
+    log(req, res, "SUCCESS");
+});
+
+
 APP.listen(PORT, () => {
     console.log('Listening on port 3000...')
 });
@@ -1052,7 +1082,6 @@ async function tokenExists(token) {
     const RESULT = await sqlQuery(SQL);
     return RESULT.length !== 0;
 }
-
 /*
 All requests and example header and urls
 
