@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const svgElements = document.querySelectorAll('svg');
     let svgElementsData = [];
     svgElements.forEach((svgElement) => {
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }, 1000 / 60);
-    
+
     const firstForm = document.getElementById('firstForm');
     const firstFormEmail = document.getElementById('email');
     const firstFormPassword = document.getElementById('password');
@@ -44,12 +44,12 @@ document.addEventListener('DOMContentLoaded', function() {
     let USER = {};
 
     for (let i = 0; i < cancleButtons.length; i++) {
-        cancleButtons[i].addEventListener('click', function() {
+        cancleButtons[i].addEventListener('click', function () {
             window.location.href = './index.html';
         });
     }
 
-    firstForm.addEventListener('submit', function(event) {
+    firstForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
         const user = {
@@ -64,16 +64,20 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        let password = firstFormPassword.value;
+        // hash password
+        console.log(password.hashCode());
+
         USER = {
             email: firstFormEmail.value,
-            password: firstFormPassword.value,
+            password: password.hashCode(),
         };
 
         firstForm.style.display = 'none';
         secondForm.style.display = 'flex';
     });
 
-    firstFormEmail.addEventListener('blur', async function() {
+    firstFormEmail.addEventListener('blur', async function () {
         let response = await fetch(`http://localhost:3000/check/email/${firstFormEmail.value}`);
         if (response.status !== 200) {
             error[0].style.display = 'block';
@@ -92,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    firstFormPassword.addEventListener('blur', function() {
+    firstFormPassword.addEventListener('blur', function () {
         if (firstFormConfirmPassword.value === '') return;
         if (firstFormPassword.value !== firstFormConfirmPassword.value) {
             error[0].style.display = 'block';
@@ -107,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    firstFormConfirmPassword.addEventListener('blur', function() {
+    firstFormConfirmPassword.addEventListener('blur', function () {
         if (firstFormPassword.value !== firstFormConfirmPassword.value) {
             error[0].style.display = 'block';
             error[0].innerText = 'Passwörter stimmen nicht überein!';
@@ -121,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    secondForm.addEventListener('submit', function(event) {
+    secondForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
         const firstName = document.getElementById('firstname');
@@ -139,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
         thirdForm.style.display = 'flex';
     });
 
-    thirdForm.addEventListener('submit', function(event) {
+    thirdForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
         const street = document.getElementById('street');
@@ -159,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fourthForm.style.display = 'flex';
     });
 
-    username.addEventListener('blur', async function() {
+    username.addEventListener('blur', async function () {
         let response = await fetch(`http://localhost:3000/check/username/${username.value}`);
         if (response.status !== 200) {
             error[0].style.display = 'block';
@@ -172,9 +176,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    fourthForm.addEventListener('submit', function(event) {
+    fourthForm.addEventListener('submit', function (event) {
         event.preventDefault();
-        
+
         const username = document.getElementById('username');
         const profileImage = document.getElementById('profilePicture');
 
@@ -228,4 +232,16 @@ async function registerUser(USER) {
 
     let data = await response.text();
     sessionStorage.setItem('token', data);
+}
+
+String.prototype.hashCode = function () {
+    var hash = 0,
+        i, chr;
+    if (this.length === 0) return hash;
+    for (i = 0; i < this.length; i++) {
+        chr = this.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash.toString();
 }
