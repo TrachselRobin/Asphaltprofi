@@ -83,9 +83,9 @@ APP.get('/token/:token', async (req, res) => {
 
 APP.post('/user', async (req, res) => {
     const BODY = req.body;
-    const USER = {prename: BODY.prename, name: BODY.name, birthdate: BODY.birthdate, username: BODY.username, email: BODY.email, password: BODY.password, imageURL: BODY.image ,aboID: 1};
+    const USER = {prename: BODY.prename, name: BODY.name, birthdate: BODY.birthdate, username: BODY.username, email: BODY.email, password: BODY.password.hashCode(), imageURL: BODY.image ,aboID: 1};
     const ADDRESS = {street: BODY.street, city: BODY.city, zip: BODY.zip, number: BODY.number};
-    
+
     // check if user email exists
     let result = await userEmailExists(USER.email);
     if (result) {
@@ -419,6 +419,8 @@ APP.put('/user/car', async (req, res) => {
 APP.post('/login', async (req, res) => {
     const BODY = req.body;
     const USER = {email: BODY.email, password: BODY.password};
+
+    USER.password = USER.password.hashCode();
     
     // check if user email exists
     let result = await userEmailExists(USER.email);
@@ -619,6 +621,25 @@ APP.get('/user/:id/friends', async (req, res) => {
     log(req, res, "SUCCESS");
 });
 
+// get friend requests
+APP.get('/user/:id/friendrequests', async (req, res) => {
+    const USERID = req.params.id;
+
+    // check if user id exists
+    let result = await userIdExists(USERID);
+    if (!result) {
+        res.status(404).send("User not found");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    const SQL = `SELECT * FROM user_friend WHERE friendID = ${USERID}`;
+    result = await sqlQuery(SQL);
+    res.send(result);
+
+    log(req, res, "SUCCESS");
+});
+
 // add time
 APP.post('/user/car/time', async (req, res) => {
     const BODY = req.body;
@@ -734,12 +755,11 @@ APP.get('/leaderboard', async (req, res) => {
 
 // create chat with a friend
 APP.post('/user/chat', async (req, res) => {
-    const USERID = req.body.userID;
     const BODY = req.body;
-    const CHAT = {name: BODY.name, friendID: BODY.friendID};
+    const CHAT = {userID: BODY.userID, friendID: BODY.friendID};
     
     // check if user id exists
-    let result = await userIdExists(USERID);
+    let result = await userIdExists(CHAT.userID);
     if (!result) {
         res.status(404).send("User not found");
         log(req, res, "ERROR");
@@ -749,25 +769,32 @@ APP.post('/user/chat', async (req, res) => {
     // check if friend id exists
     result = await userIdExists(CHAT.friendID);
     if (!result) {
-        res.status(404).send("Friend not found");
+        res.status(404).send("Freund nicht gefunden!");
         log(req, res, "ERROR");
         return;
     }
 
     // check if chat already exists
-    let sql = `SELECT * FROM chat WHERE userID = ${USERID} AND user2ID = ${CHAT.friendID} OR userID = ${CHAT.friendID} AND user2ID = ${USERID}`;
+    let sql = `SELECT * FROM chat WHERE userID = ${CHAT.userID} AND user2ID = ${CHAT.friendID} OR userID = ${CHAT.friendID} AND user2ID = ${CHAT.userID}`;
     result = await sqlQuery(sql);
     if (result.length !== 0) {
-        res.status(409).send("Chat already exists");
+        res.status(409).send("Chat existiert bereits!");
         log(req, res, "ERROR");
         return;
     }
 
-    sql = `INSERT INTO chat (userID, user2ID, name) VALUES (${USERID}, ${CHAT.friendID}, '${CHAT.name}')`;
+    // check if friend is equal to user
+    if (CHAT.userID == CHAT.friendID) {
+        res.status(409).send("Kein Chat mit sich selbst möglich!");
+        log(req, res, "ERROR");
+        return;
+    }
+
+    sql = `INSERT INTO chat (userID, user2ID) VALUES (${CHAT.userID}, ${CHAT.friendID})`;
     result = await sqlQuery(sql);
     const CHATID = result.insertId;
 
-    sql = `INSERT INTO user_chat (userID, chatID) VALUES (${USERID}, ${CHATID})`;
+    sql = `INSERT INTO user_chat (userID, chatID) VALUES (${CHAT.userID}, ${CHATID})`;
     result = await sqlQuery(sql);
 
     sql = `INSERT INTO user_chat (userID, chatID) VALUES (${CHAT.friendID}, ${CHATID})`;
@@ -1087,6 +1114,19 @@ async function tokenExists(token) {
     const RESULT = await sqlQuery(SQL);
     return RESULT.length !== 0;
 }
+
+String.prototype.hashCode = function () {
+    var hash = 0,
+        i, chr;
+    if (this.length === 0) return hash;
+    for (i = 0; i < this.length; i++) {
+        chr = this.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash.toString();
+};
+
 /*
 All requests and example header and urls
 

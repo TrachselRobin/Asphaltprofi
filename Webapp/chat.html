@@ -23,7 +23,7 @@
                 </ul>
             </li>
             <li>
-                <input type="text" id="message" placeholder="Nachricht">
+                <input type="text" id="message" placeholder="Nachricht" autocomplete="off">
                 <button onclick="sendMessage()" id="send">Senden</button>
             </li>
         </ul>
@@ -33,11 +33,7 @@
         <form id="addChatForm">
             <label for="chatName">Wähle einen Freund</label>
             <select id="chatName">
-                <option value="John">John</option>
-                <option value="Emily">Emily</option>
-                <option value="Michael">Michael</option>
-                <option value="Sarah">Sarah</option>
-                <option value="David">David</option>
+                <option value="" selected disabled hidden></option>
             </select>
             <div>
                 <button id="cancleModal" type="cancle">Abbrechen</button>

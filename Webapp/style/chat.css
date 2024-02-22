@@ -125,16 +125,20 @@ body > div > button {
 
 #message {
     padding: 0.5rem;
-    border-radius: 50px;
-    border:none;
+    border-radius: 20px;
+    border: none;
+    float: left;
     margin: 0.3rem;
     width: 80%;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    background-color: white;
 }
 
 #send {
     padding: 0.5rem;
     border-radius: 50px;
-    border:none;
+    border: none;
     margin: 0.3rem;
     width: 10%;
     background-color: #bebebe;
@@ -168,7 +172,7 @@ body > div > button {
 #addChatForm select {
     padding: 0.5rem;
     border-radius: 10px;
-    border:none;
+    border: none;
     margin: 0.3rem;
     width: 100%;
 }
@@ -185,7 +189,14 @@ body > div > button {
 #addChatForm button {
     padding: 0.5rem;
     border-radius: 50px;
-    border:none;
+    border: none;
     background-color: #bebebe;
     cursor: pointer;
+}
+
+#chatName option {
+    padding: 0.5rem;
+    border-radius: 0px;
+    border: none;
+    width: 100%;
 }

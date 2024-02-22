@@ -73,13 +73,12 @@ CREATE TABLE address (
 CREATE TABLE chat (
     `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
     `userID` INTEGER,
-    `user2ID` INTEGER,
-    `name` VARCHAR(20)
+    `user2ID` INTEGER
 );
 
 CREATE TABLE message (
     `ID` INTEGER AUTO_INCREMENT, PRIMARY KEY (ID),
-    `text` VARCHAR(100),
+    `text` VARCHAR(1000),
     `time` DATETIME,
     `userID` INTEGER
 );
