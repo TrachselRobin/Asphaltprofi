@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +18,10 @@
         </ul>
         <ul id="chatMessages">
             <li>
+                <button id="closeChat" onclick="closeChat()"><</button>
+                <h2 id="chatTitle">Chatname</h2>
+            </li>
+            <li>
                 <ul id="messages">
                     
                 </ul>
@@ -35,6 +39,7 @@
             <select id="chatName">
                 <option value="" selected disabled hidden></option>
             </select>
+            <p id="error">error</p>
             <div>
                 <button id="cancleModal" type="cancle">Abbrechen</button>
                 <button id="submitModal" type="submit">Erstellen</button>

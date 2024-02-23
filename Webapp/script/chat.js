@@ -25,6 +25,31 @@ document.addEventListener('DOMContentLoaded', function() {
             MESSAGEINPUT.value = MESSAGEINPUT.value.substring(0, 1000);
         }
     });
+
+    const SUBMITCHAT = document.getElementById('submitModal');
+    const CANCELCHAT = document.getElementById('cancleModal');
+
+    CANCELCHAT.addEventListener('click', function() {
+        const CHATDIALOG = document.getElementById('addChatDialog');
+        CHATDIALOG.close();
+    });
+
+    SUBMITCHAT.addEventListener('click', function() {
+        createChat();
+    });
+
+    // check every 5 seconds for new messages. if there are new messages, update chatList and show new messages
+    setInterval(async function() {
+        if (currentChat) {
+            const response = await fetch(`http://localhost:3000/chat/${currentChat}/messages`);
+            const data = await response.json();
+            const chat = getChat(currentChat);
+            if (data.length > chat.messages.length) {
+                chat.messages = data;
+                showMessages(data);
+            }
+        }
+    }, 5000);
 });
 
 async function getUser() {
@@ -59,6 +84,12 @@ async function loadChats() {
 
 async function openChat(chatID) {
     currentChat = chatID;
+
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 1000) {
+        const section = document.querySelector('body section');
+        section.style.right = "0";
+    }
 
     if (getChat(chatID).messages.length > 0) {
         showMessages(getChat(chatID).messages);
@@ -136,7 +167,30 @@ function createMessageElement(message) {
 }
 
 async function createChat() {
-    
+    const friendID = document.getElementById('chatName').value;
+    const response = await fetch(`http://localhost:3000/user/chat`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            userID: user.ID,
+            friendID: friendID
+        })
+    });
+
+    let text = await response.text();
+
+    if (response.status !== 200) {
+        const error = document.getElementById('error');
+        error.innerText = text;
+        return;
+    }
+
+    const CHATDIALOG = document.getElementById('addChatDialog');
+    CHATDIALOG.close();
+
+    loadChats();
 }
 
 function showChats() {
@@ -176,6 +230,8 @@ function showChats() {
         const div = document.createElement('div');
         const h2 = document.createElement('h2');
         h2.innerText = data[0].username;
+        const CHATTITLE = document.getElementById('chatTitle');
+        CHATTITLE.innerText = data[0].username;
         const p = document.createElement('p');
         // chat.lastMessage.text might be undefined. Check if it exists before accessing it.
         if (chat.lastMessage && chat.lastMessage.text) {
@@ -195,7 +251,7 @@ function showChats() {
     });
 
     // open first chat with showMessages
-    if (chatList.length > 0) {
+    if (chatList.length > 0 && window.innerWidth === 1000) {
         openChat(chatList[0].ID);
     }
 }
@@ -251,4 +307,9 @@ function getChat(chatID) {
         }
     }
     return null;
+}
+
+function closeChat() {
+    const section = document.querySelector('body section');
+    section.style.right = "-100%";
 }

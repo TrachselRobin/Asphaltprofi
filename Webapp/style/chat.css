@@ -2,11 +2,13 @@ body {
     margin: 0;
     padding: 0;
     font-family: "Roboto", sans-serif;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 
 body section {
     display: flex;
-    height: 60vh;
 }
 
 #chatlist {
@@ -16,6 +18,11 @@ body section {
     width: 35%;
     height: 100%;
     overflow-y: scroll;
+    background-color: white;
+}
+
+html {
+    height: 100%;
 }
 
 body > div {
@@ -23,6 +30,8 @@ body > div {
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
+    height: 4rem;
+    min-height: 60px;
 }
 
 body > div > button {
@@ -78,12 +87,40 @@ body > div > button {
     display: flex;
     flex-direction: column;
     width: 65%;
+    height: calc(100vh - 6rem);
     background-color: #f5f5f5;
 }
 
 #chatMessages > li:first-child {
-    height: 100%;
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem;
+    list-style: none;
+    background-color: #e6e6e6;
+    height: 2rem;
+}
+
+#chatMessages > li:first-child h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+#chatMessages > li:last-child {
+    display: flex;
+    justify-content: space-between;
+}
+
+#chatMessages > li:nth-child(2) {
+    height: 70vh;
     overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+/* make scrollbar invisible */
+#chatMessages > li:nth-child(2)::-webkit-scrollbar {
+    width: 0;
 }
 
 #messages {
@@ -110,6 +147,11 @@ body > div > button {
     max-width: 70%;
 }
 
+.message p {
+    hyphens: auto;
+    hyphenate-limit-chars: auto 3;
+}
+
 #loader {
     position: absolute;
     opacity: 0.5;
@@ -129,7 +171,7 @@ body > div > button {
     border: none;
     float: left;
     margin: 0.3rem;
-    width: 80%;
+    width: 100%;
     overflow-y: auto;
     overflow-wrap: break-word;
     background-color: white;
@@ -140,8 +182,7 @@ body > div > button {
     border-radius: 50px;
     border: none;
     margin: 0.3rem;
-    width: 10%;
-    background-color: #bebebe;
+    background-color: #e6e6e6;
     cursor: pointer;
 }
 
@@ -199,4 +240,51 @@ body > div > button {
     border-radius: 0px;
     border: none;
     width: 100%;
+}
+
+#chatList::-webkit-scrollbar {
+    display: none;
+    padding: 0;
+}
+
+#closeChat {
+    display: none;
+    padding: 0.5rem;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: large;
+    border: none;
+    background-color: #e6e6e6;
+    cursor: pointer;
+}
+
+#error {
+    display: none;
+    padding: 0.5rem;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: large;
+    border: none;
+    background-color: #e6e6e6;
+    cursor: pointer;
+    color: red;
+}
+
+@media (max-width: 999px) {
+    #closeChat {
+        display: block;
+    }
+
+    body section {
+        width: 200%;
+        position: absolute;
+    }
+
+    #chatlist {
+        width: 50%;
+    }
+
+    #chatMessages {
+        width: 50%;
+    }
 }
