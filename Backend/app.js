@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
         cb(null, './databaseImages'); // Verzeichnis für hochgeladene Bilder
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '_' + file.originalname); // Benennen Sie die hochgeladene Datei um
+        cb(null, file.originalname); // Benennen Sie die hochgeladene Datei um
     }
 });
 
@@ -37,7 +37,7 @@ APP.get('/', async (req, res) => {
 });
 
 APP.get('/users', async (req, res) => {
-    const SQL = 'SELECT * FROM users';
+    const SQL = 'SELECT * FROM users LIMIT 20';
     
     const RESULT = await sqlQuery(SQL);
     res.send(RESULT);
@@ -1001,6 +1001,31 @@ APP.post('/upload', upload.single('image'), (req, res) => {
     log(req, res, "SUCCESS");
 });
 
+// select all users that start with the given string
+APP.get('/users/:string', async (req, res) => {
+    const STRING = req.params.string;
+    const SQL = `SELECT * FROM users WHERE username LIKE '${STRING}%' LIMIT 20`;
+    const RESULT = await sqlQuery(SQL);
+    res.json(RESULT);
+    log(req, res, "SUCCESS");
+});
+
+// select all users where their prename or name starts with the given string
+APP.get('/users/:prename/:name', async (req, res) => {
+    const PRENAME = req.params.prename;
+    const NAME = req.params.name;
+    const SQL = `SELECT * FROM users WHERE prename LIKE '${PRENAME}%' AND name LIKE '${NAME}%' LIMIT 20`;
+    const RESULT = await sqlQuery(SQL);
+    res.json(RESULT);
+    log(req, res, "SUCCESS");
+});
+
+// send image from databaseImages folder
+APP.get('/image/:url', async (req, res) => {
+    const URL = req.params.url;
+    res.sendFile(__dirname + '/databaseImages/' + URL);
+    log(req, res, "SUCCESS");
+});
 
 APP.listen(PORT, () => {
     console.log('Listening on port 3000...')

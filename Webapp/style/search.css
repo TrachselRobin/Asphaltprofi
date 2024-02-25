@@ -1,0 +1,83 @@
+:root {
+    --background: #fff;
+    --lightgray: #F7F7F7;
+    --gray: #E7ECEF;
+    --dark: #141B41;
+    --highlighted: #FFCB47;
+    --contrast: #4A5043;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: 400 1rem 'Roboto', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+}
+
+form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 2rem 0;
+    height: 3rem;
+}
+
+form input {
+    height: 100%;
+    width: 100%;
+    padding: 0 1rem;
+    margin: 0 1rem 0 0;
+    border: 2px solid var(--gray);
+    border-radius: 3rem;
+}
+
+form button {
+    height: 100%;
+    padding: 0.5rem;
+    aspect-ratio: 1/1;
+    border: none;
+    background-color: var(--highlighted);
+    border-radius: 3rem;
+}
+
+form button img {
+    height: 100%;
+    width: 100%;
+}
+
+#userList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+#userList .user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background-color: var(--lightgray);
+    border-radius: 5px;
+    height: 4rem;
+}
+
+#userList .user img {
+    height: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: red;
+}

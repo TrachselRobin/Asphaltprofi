@@ -184,14 +184,16 @@ document.addEventListener('DOMContentLoaded', function () {
         let image = profileImage.files[0];
         let date = Date.now();
         let ending = image.name.substring(image.name.lastIndexOf('.'), image.name.length);
-        let imageName = username.value + ending;
+        let imageName = date + "_" + username.value + ending;
+        console.log(imageName);
+
         const formData = new FormData();
         formData.append('image', image, imageName);
 
         USER = {
             ...USER,
             username: username.value,
-            image: date + "_" + imageName
+            image: imageName
         };
 
         console.log(USER);
@@ -202,6 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function createUser(USER, formData) {
     await registerUser(USER);
+    console.log(formData);
     upload(formData);
 }
 
