@@ -153,4 +153,24 @@ INSERT INTO `users` (prename, name, birthdate, username, email, password, aboID,
 INSERT INTO `user_vehicle` (userID, vehicleID) VALUES (1000000000, 1);
 INSERT INTO `user_vehicle` (userID, vehicleID) VALUES (1000000001, 2);
 
+INSERT INTO `time` (start, end) VALUES ('2021-01-01 00:00:00', '2021-01-01 01:00:00');
+INSERT INTO `time` (start, end) VALUES ('2021-01-01 01:00:00', '2021-01-01 02:00:00');
+
+INSERT INTO `vehicle_time` (vehicleID, timeID) VALUES (1, 1);
+INSERT INTO `vehicle_time` (vehicleID, timeID) VALUES (2, 2);
+
+INSERT INTO `chat` (userID, user2ID) VALUES (1000000000, 1000000001);
+
+INSERT INTO `message` (text, time, userID) VALUES ('Hallo', '2021-01-01 00:00:00', 1000000000);
+INSERT INTO `message` (text, time, userID) VALUES ('Hallo', '2021-01-01 00:00:00', 1000000001);
+
+INSERT INTO `chat_message` (chatID, messageID) VALUES (1, 1);
+INSERT INTO `chat_message` (chatID, messageID) VALUES (1, 2);
+
+INSERT INTO `user_chat` (userID, chatID) VALUES (1000000000, 1);
+INSERT INTO `user_chat` (userID, chatID) VALUES (1000000001, 1);
+
+INSERT INTO `user_friend` (userID, friendID) VALUES (1000000000, 1000000001);
+INSERT INTO `user_friend` (userID, friendID) VALUES (1000000001, 1000000000);
+
 SELECT * FROM `users`;
